@@ -1,5 +1,3 @@
-# pharmacy-android
-=======
 # Reanimated example
 
 <p>
