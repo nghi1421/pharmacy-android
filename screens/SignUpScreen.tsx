@@ -4,7 +4,6 @@ import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
-
 export default function SignupScreen() {
     const navigation = useNavigation();
   return (
@@ -72,7 +71,7 @@ export default function SignupScreen() {
                 className="flex-row justify-center">
 
                 <Text>Already have an account? </Text>
-                <TouchableOpacity onPress={()=> navigation.push('Đăng nhập')}>
+                <TouchableOpacity onPress={()=> navigation.push('login')}>
                     <Text className="text-sky-600">Login</Text>
                 </TouchableOpacity>
 

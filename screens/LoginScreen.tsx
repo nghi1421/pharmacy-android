@@ -59,7 +59,10 @@ export default function LoginScreen() {
                     className="w-full" 
                     entering={FadeInDown.delay(400).duration(1000).springify()}>
 
-                    <TouchableOpacity className="w-full bg-sky-400 p-3 rounded-2xl mb-3">
+                    <TouchableOpacity 
+                        onPress={()=> navigation.push('main')}
+                        className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
+                    >
                         <Text className="text-xl font-bold text-white text-center">Đăng nhập</Text>
                     </TouchableOpacity>
                 </Animated.View>
@@ -69,7 +72,7 @@ export default function LoginScreen() {
                     className="flex-row justify-center">
 
                     <Text>Bạn chưa có tài khoản? </Text>
-                    <TouchableOpacity onPress={()=> navigation.push('Đăng kí')}>
+                    <TouchableOpacity onPress={()=> navigation.push('signin')}>
                         <Text className="text-sky-600">Đăng kí</Text>
                     </TouchableOpacity>
                 </Animated.View>
