@@ -1,17 +1,17 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Detail } from './Detail';
-import { Feed } from './Feed';
+import { HistoryScreen } from './HistoryScreen';
 import { Ionicons } from '@expo/vector-icons';
   
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator screenOptions={{headerShown: false }}>
             <Tab.Screen
                 name="Lịch sử mua hàng"
-                component={Feed}
+                component={HistoryScreen}
                 options={{ 
                     tabBarIcon: (tabInfo) => {
                         return ( 
