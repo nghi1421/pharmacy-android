@@ -1,6 +1,18 @@
 {
   "expo": {
     "name": "android-react-native",
-    "slug": "android-react-native"
+    "slug": "android-react-native",
+    "extra": {
+      "eas": {
+        "projectId": "e9ffc963-43dd-4243-a791-a79f376979c7"
+      }
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.thanhnghi1421.androidreactnative"
+    },
+    "ios": {
+      "bundleIdentifier": "com.thanhnghi1421.androidreactnative"
+    }
   }
 }

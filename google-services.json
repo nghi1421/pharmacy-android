@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "947416080212",
+    "project_id": "midicine-management",
+    "storage_bucket": "midicine-management.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947416080212:android:aa575459535a57260872c1",
+        "android_client_info": {
+          "package_name": "com.thanhnghi1421.androidreactnative"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKO53XbzEGOi2fjBrtxsDS_r0b9f08-3A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

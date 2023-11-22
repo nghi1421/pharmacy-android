@@ -10,7 +10,7 @@ interface ExpandableProps {
 }
 export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
     const [layoutHeight, setLayoutHeight] = useState<number|null>(0)
-    const rotate = useSharedValue(0);
+    const rotate = useSharedValue(180);
 
     const animatedStyles = useAnimatedStyle(() => ({
         marginBottom: 4,
@@ -19,7 +19,7 @@ export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
     }));
 
     const handleRotate = () => {
-        rotate.value = withTiming(data.isExpanded ? 180 : 0, {
+        rotate.value = withTiming(data.isExpanded ? 0 : 180, {
             duration: 200,
             easing: Easing.inOut(Easing.quad),
         })
@@ -59,8 +59,8 @@ export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
                 {
                     data.histories.map((history, index) => (
                         <TouchableOpacity
-                            key={`history-${index}`}
-                            className='px-3 py-2 flex-row'
+                            key={`${data.title}-history-${index}`}
+                            className='px-3 py-2 flex-row bg-white'
                         >
                             <View className="text-center justify-center">
                                 <FontAwesome

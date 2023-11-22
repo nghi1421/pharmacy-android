@@ -61,7 +61,7 @@ export function HistoryScreen() {
     }
 
     return (
-        <ScrollView className="mt-10">
+        <ScrollView>
             {
                 historiesExpand.map((historyExpand, index) => (
                     <Expandable

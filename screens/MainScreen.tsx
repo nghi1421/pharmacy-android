@@ -8,7 +8,7 @@ const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
     return (
-        <Tab.Navigator screenOptions={{headerShown: false }}>
+        <Tab.Navigator >
             <Tab.Screen
                 name="Lịch sử mua hàng"
                 component={HistoryScreen}
@@ -18,7 +18,7 @@ export default function MainScreen() {
                             <Ionicons 
                                 name="md-home"
                                 size={24} 
-                                color={tabInfo.focused ? "#006600" : "#8e8e93"} 
+                                color={tabInfo.focused ? "rgb(2 132 199)" : "#8e8e93"} 
                             /> 
                     );}
                  }}
@@ -32,7 +32,7 @@ export default function MainScreen() {
                             <Ionicons 
                                 name="md-person-circle-outline"
                                 size={24} 
-                                color={tabInfo.focused ? "#006600" : "#8e8e93"} 
+                                color={tabInfo.focused ? "rgb(2 132 199)" : "#8e8e93"} 
                             /> 
                     );}
                  }}
