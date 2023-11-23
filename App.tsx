@@ -6,6 +6,7 @@ import SignUpScreen from './screens/SignUpScreen';
 import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
@@ -60,7 +61,6 @@ function App() {
     });
 
     return unsubscribe;
-    
   }, [])
 
   return (
