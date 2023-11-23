@@ -7,12 +7,15 @@ import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient()
 
 const Stack = createNativeStackNavigator();
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
 function App() {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -64,20 +67,23 @@ function App() {
   }, [])
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-         {
-          isAuthenticated 
-            ?
-              <Stack.Screen name="main" component={MainScreen} />
-            :
-            <>
-              <Stack.Screen name="login" component={LoginScreen} />
-              <Stack.Screen name="signin" component={SignUpScreen} />
-            </>
-        }
-    </Stack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
+            {
+              isAuthenticated 
+                ?
+                  <Stack.Screen name="main" component={MainScreen} />
+                :
+                <>
+                  <Stack.Screen name="login" component={LoginScreen} />
+                  <Stack.Screen name="signin" component={SignUpScreen} />
+                </>
+            }
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
+    
   );
 }
 
