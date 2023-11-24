@@ -1,23 +1,47 @@
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native'
-import React from 'react'
+import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, TextInputComponent } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { Controller, useForm } from 'react-hook-form';
-import { useTest, useVerifyPhoneNumber } from '../hooks/authenticationHook';
+import { useVerifyPhoneNumber } from '../hooks/authenticationHook';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export interface VerifyPhoneNumberForm {
     phoneNumber: string
+}
+
+interface TextInputProp {
+    focus: () => void
 }
 
 export default function SignupScreen() {
     const navigation = useNavigation();
     const { control, handleSubmit } = useForm<VerifyPhoneNumberForm>()
     const verifyPhoneNumber = useVerifyPhoneNumber()
-    const onSubmit = (data: VerifyPhoneNumberForm) => { 
+    const [otp, setOtp] = useState(['', '', '', '']);
+    const inputRefs = useRef<TextInputProp[]>(Array(otp.length).fill({}));
+    
+    const onSubmit = async (data: VerifyPhoneNumberForm) => { 
         verifyPhoneNumber.mutate(data)
+        // const otp = await getOtp();
+        // console.log(otp)
     }
 
+     const handleOtpChange = (index: number, value: string) => {
+        const newOtp = [...otp];
+        newOtp[index] = value;
+        setOtp(newOtp);
+         
+        if (value && index < otp.length - 1 && inputRefs.current[index + 1]) {
+            inputRefs.current[index + 1].focus();
+        }
+    };
+    
+    useEffect(() => {
+
+    }, [verifyPhoneNumber.data])
+    // console.log(getOtp())
   return (
     <View className="bg-white h-full w-full">
       <StatusBar style="light" />
@@ -45,7 +69,26 @@ export default function SignupScreen() {
             </Animated.Text>
         </View>
 
-        <View className="flex items-center mx-5 space-y-4">
+            <View className="flex items-center mx-5 space-y-4">
+                
+
+                <View style={styles.otpContainer}>
+                    {otp.map((digit, index) => (
+                        <TextInput
+                            ref={(ref) => (inputRefs.current[index] = ref as TextInputProp)}
+                            key={index}
+                            style={styles.input}
+                            maxLength={1}
+                            keyboardType="numeric"
+                            value={digit}
+                            onChangeText={(value) => handleOtpChange(index, value)}
+                        />
+                    ))}
+                </View>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Verify</Text>
+                </TouchableOpacity>
+                  
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
                 className="bg-black/5 p-5 rounded-2xl w-full">
@@ -57,7 +100,7 @@ export default function SignupScreen() {
                                 fieldState: { error },
                             }) => (
                                 <TextInput
-                                    keyboardType="phone-pad" // Định dạng bàn phím cho nhập số điện thoại
+                                    keyboardType="phone-pad"
                                     placeholder="Số điện thoại"
                                     placeholderTextColor={'gray'}
                                     value={value}
@@ -103,3 +146,34 @@ export default function SignupScreen() {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  otpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  input: {
+    height: 50,
+    width: 50,
+    borderWidth: 1,
+    borderRadius: 5,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: '#007BFF',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+});

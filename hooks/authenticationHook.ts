@@ -2,8 +2,8 @@ import { useMutation, useQuery } from "react-query"
 import axiosClient from "../utils/axios"
 import { SIGN_IN_CUSTOMER_URL, VERIFY_PHONE_NUMBER_URL } from "../utils/constants"
 import { VerifyPhoneNumberForm } from "../screens/SignUpScreen"
-import { Alert } from "react-native"
 import axios from "axios"
+import { setOtp } from "../utils/helper"
 
 const useSignIn = () => {
     return useMutation({
@@ -23,12 +23,12 @@ const useVerifyPhoneNumber = () => {
         mutationFn: async (data: VerifyPhoneNumberForm) =>{
            return await axiosClient
             .post(VERIFY_PHONE_NUMBER_URL, data)
-            .then((response) => {
-                Alert.alert(JSON.stringify(response.data.otpCode))
-                if (response.data.message) {
-                    return response.data.data
+            .then(async (response) => {
+                if (response.data.otpCode) {
+                    return response.data.otpCode
                 }
-                return response
+                await setOtp('')
+                response.data
             })
             .catch(error => {
                 console.log()

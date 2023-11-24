@@ -6,7 +6,6 @@ import SignUpScreen from './screens/SignUpScreen';
 import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 const queryClient = new QueryClient()
@@ -67,23 +66,23 @@ function App() {
   }, [])
 
   return (
-    <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-            {
-              isAuthenticated 
-                ?
-                  <Stack.Screen name="main" component={MainScreen} />
-                :
-                <>
-                  <Stack.Screen name="login" component={LoginScreen} />
-                  <Stack.Screen name="signin" component={SignUpScreen} />
-                </>
-            }
-        </Stack.Navigator>
-      </NavigationContainer>
-    </QueryClientProvider>
-    
+    <NavigationContainer>
+      <QueryClientProvider client={queryClient}>
+        
+            <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
+              {
+                isAuthenticated 
+                  ?
+                    <Stack.Screen name="main" component={MainScreen} />
+                  :
+                  <>
+                    <Stack.Screen name="login" component={LoginScreen} />
+                    <Stack.Screen name="signin" component={SignUpScreen} />
+                  </>
+              }
+          </Stack.Navigator>
+      </QueryClientProvider>
+    </NavigationContainer>
   );
 }
 
