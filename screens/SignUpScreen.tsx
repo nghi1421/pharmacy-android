@@ -7,7 +7,7 @@ import {
   TextInputKeyPressEventData,
   Image
 } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -18,6 +18,11 @@ import yup from '../utils/yup';
 import { FormTextInput } from '../components/FomTextInput';
 import * as Yup from 'yup';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { getCustomer } from '../utils/helper';
+import { FormPhoneNumber } from '../components/FormPhoneNumber';
+import { Customer } from '../types/User';
+import { useAuth } from '../contexts/AuthContext';
+import { AuthContext } from '../App';
 
 export interface VerifyPhoneNumberForm {
     phoneNumber: string
@@ -84,6 +89,7 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
 
 export default function SignupScreen() {
   const navigation = useNavigation();
+  const { isAuthenticated, logIn } = useContext(AuthContext);
   const {
     control: phoneNumberControl,
     handleSubmit: handleSubmitPhoneNumber,
@@ -95,6 +101,7 @@ export default function SignupScreen() {
   const {
     control: customerControl,
     handleSubmit: handleSubmitCustomer,
+    setError
   } = useForm<CreateCustomerForm>({
     defaultValues: defaultValues,
     resolver: yupResolver(customerFormValidate)
@@ -105,10 +112,16 @@ export default function SignupScreen() {
   const inputRefs = useRef<TextInputProp[]>(Array(otp.length).fill({}));
   const [checkOtp, setCheckOtp] = useState<string>('')
   const [isVeriry, setIsVeriry] = useState<boolean>(false)
+  const [isHaveInfor, setIsHaveInfor] = useState<boolean>(false)
+  const [otpError, setOtpError] = useState<string>('')
   const onSubmit = async (data: VerifyPhoneNumberForm) => { 
     verifyPhoneNumber.mutate(data)
   }
 
+  const onSubmitCustomer = async (data: CreateCustomerForm) => { 
+    console.log(data)
+  }
+  
   const handleOtpChange = (index: number, value: string) => {
       const newOtp = [...otp];
       newOtp[index] = value;
@@ -129,29 +142,54 @@ export default function SignupScreen() {
   }
 
   const checkVerify = () => {
+    console.log(otp.join(''));
     if (otp.join('') === checkOtp) {
-      setIsVeriry(true)
+      console.log(isAuthenticated);
+      logIn();
+      console.log(isAuthenticated);
+      // navigation.('main')
+      if (isHaveInfor) {
+        logIn();
+      }
+      else {
+        setIsVeriry(true)
+        logIn();
+        console.log(isAuthenticated);
+        navigation.push('main')
+      }
     }
     else {
-      
+      setOtpError('Mã OTP không hợp lệ vui lòng kiểm tra.')
     }
   }
 
   useEffect(() => {
-    setCheckOtp(verifyPhoneNumber.data)
+    if (verifyPhoneNumber.data) {
+      if (verifyPhoneNumber.data.errorMessage) {
+        setError('phoneNumber', {type: 'custom', message: verifyPhoneNumber.data.errorMessage})
+      }
+      else {
+        getCustomer().then((customer) => {
+            if (customer) {
+              setIsHaveInfor(true)
+            }
+            else {
+              setIsHaveInfor(false)
+            }
+        })
+        setCheckOtp(verifyPhoneNumber.data)
+      }
+    }
+   
   }, [verifyPhoneNumber.data])
 
   return (
-  <KeyboardAwareScrollView
-    extraScrollHeight={50}
-    enableOnAndroid
-    className='bg-white'
-  >
+
     <View className="bg-white h-full w-full">
     <StatusBar style="light" />
      <View className="h-10 w-full bg-sky-500" />
 
-    <View  className="w-full flex justify-around pt-10">
+    <View className="w-full flex justify-around pt-10">
       <View className="flex items-center">
           <Animated.Text 
               entering={FadeInUp.duration(1000).springify()} 
@@ -166,60 +204,78 @@ export default function SignupScreen() {
             ?
             isVeriry
               ?
-              <>
-                <Animated.View 
-                  entering={FadeInDown.duration(1000).springify()} 
-                  className="p-2 rounded-2xl w-full">
-                   <FormTextInput
-                    name='username'
-                    placeholder='Tên đăng nhập'
-                    control={customerControl}
-                  />
-                </Animated.View>
-               
-                <Animated.View 
-                  entering={FadeInDown.duration(1000).springify()} 
-                  className="p-2 rounded-2xl w-full"
-                >
-                  <FormTextInput
-                    name='password'
-                    placeholder='Mật khẩu'
-                    control={customerControl}
-                  />
-                </Animated.View>
-                  
-                <Animated.View 
-                  entering={FadeInDown.duration(1000).springify()} 
-                  className="p-2 rounded-2xl w-full"
-                >
-                  <FormTextInput
-                    name='confirmationPassword'
-                    placeholder='Xác nhận mật khẩu'
-                    control={customerControl}
-                  />
-                </Animated.View>
-                  
-                <Animated.View 
-                  entering={FadeInDown.duration(1000).springify()} 
-                  className="p-2 rounded-2xl w-full"
-                >
-                  <FormTextInput
-                    name='name'
-                    placeholder='Họ và tên'
-                    control={customerControl}
-                  />
-                </Animated.View>
-                  
-                <Animated.View 
-                  entering={FadeInDown.duration(1000).springify()} 
-                  className="p-2 rounded-2xl w-full"
-                >
-                  <FormTextInput
-                    name='address'
-                    placeholder='Địa chỉ'
-                    control={customerControl}
-                  />
-                </Animated.View>
+                <>
+                  <KeyboardAwareScrollView
+                    extraScrollHeight={50}
+                    className='w-full flex'
+                    enableOnAndroid
+                  >
+
+                  <Animated.View 
+                    entering={FadeInDown.duration(1000).springify()} 
+                    className="p-2 rounded-2xl w-full">
+                    <FormTextInput
+                      name='username'
+                      placeholder='Tên đăng nhập'
+                      control={customerControl}
+                    />
+                  </Animated.View>
+                
+                  <Animated.View 
+                    entering={FadeInDown.duration(1000).springify()} 
+                    className="p-2 rounded-2xl w-full"
+                  >
+                    <FormTextInput
+                      name='password'
+                      placeholder='Mật khẩu'
+                      isPassword={true}
+                      control={customerControl}
+                    />
+                  </Animated.View>
+                    
+                  <Animated.View 
+                    entering={FadeInDown.duration(1000).springify()} 
+                    className="p-2 rounded-2xl w-full"
+                  >
+                    <FormTextInput
+                      name='confirmationPassword'
+                      isPassword={true}
+                      placeholder='Xác nhận mật khẩu'
+                      control={customerControl}
+                    />
+                  </Animated.View>
+                    
+                  <Animated.View 
+                    entering={FadeInDown.duration(1000).springify()} 
+                    className="p-2 rounded-2xl w-full"
+                  >
+                    <FormTextInput
+                      name='name'
+                      placeholder='Họ và tên'
+                      control={customerControl}
+                    />
+                  </Animated.View>
+                    
+                  <Animated.View 
+                    entering={FadeInDown.duration(1000).springify()} 
+                    className="p-2 rounded-2xl w-full"
+                  >
+                    <FormTextInput
+                      name='address'
+                      placeholder='Địa chỉ'
+                      control={customerControl}
+                    />
+                    </Animated.View>  
+
+                    <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
+                    <TouchableOpacity
+                      className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
+                      onPress={handleSubmitCustomer(onSubmitCustomer)}
+                    >
+                        <Text className="text-xl font-bold text-white text-center">Đăng ký</Text>
+                    </TouchableOpacity>
+                  </Animated.View>
+                </KeyboardAwareScrollView>
               </>
               :
               <>
@@ -242,18 +298,21 @@ export default function SignupScreen() {
                               />
                           ))}
                     </View>
+                    <Text className='mt-2 text-red-600 font-semibold'>{ otpError }</Text>  
                 </Animated.View>
 
                 <Animated.View className="w-full flex-row gap-3 mt-10" entering={FadeInDown.delay(600).duration(1000).springify()}>
-
-                  <TouchableOpacity className="flex-1 mt-20 bg-sky-400 p-3 rounded-2xl mb-3" onPress={() => {
-                    checkVerify();
-                  }}>
+                  <TouchableOpacity className="flex-1 mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
+                    onPress={() => {
+                      checkVerify();
+                
+                    }}
+                  >
                       <Text className="text-xl font-bold text-white text-center">Xác thực</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    className="flex-1 mt-20 border-2 border-sky-400 p-3 rounded-2xl mb-3"
+                    className="flex-1 mt-10 border-2 border-sky-400 p-3 rounded-2xl mb-3"
                     onPress={handleSubmitPhoneNumber(onSubmit)}>
                       <Text className="text-xl font-bold text-sky-400 text-center">Gửi lại OTP</Text>
                   </TouchableOpacity>
@@ -262,20 +321,20 @@ export default function SignupScreen() {
               </>
             :
             <>
-              <FormTextInput
+              <FormPhoneNumber
                 name='phoneNumber'
                 placeholder='Số điện thoại'
                 control={phoneNumberControl}
               />
 
-            <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
-                <TouchableOpacity
-                  className="w-full mt-20 bg-sky-400 p-3 rounded-2xl mb-3"
-                  onPress={handleSubmitPhoneNumber(onSubmit)}
-                >
-                    <Text className="text-xl font-bold text-white text-center">Xác thực</Text>
-                </TouchableOpacity>
-            </Animated.View>
+              <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
+                  <TouchableOpacity
+                    className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
+                    onPress={handleSubmitPhoneNumber(onSubmit)}
+                  >
+                      <Text className="text-xl font-bold text-white text-center">Xác thực</Text>
+                  </TouchableOpacity>
+              </Animated.View>
             </>
         }
           <Animated.View 
@@ -290,6 +349,5 @@ export default function SignupScreen() {
       </View>
     </View>
   </View>
-  </KeyboardAwareScrollView>
 )
 }

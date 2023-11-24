@@ -70,7 +70,6 @@ export default function LoginScreen() {
                 <Animated.View 
                     entering={FadeInDown.delay(600).duration(1000).springify()} 
                     className="flex-row justify-center">
-
                     <Text>Bạn chưa có tài khoản? </Text>
                     <TouchableOpacity onPress={()=> navigation.push('signin')}>
                         <Text className="text-sky-600">Đăng kí</Text>

@@ -6,14 +6,12 @@ export interface FormInputTextProps {
     name: string
     placeholder: string
     control: any
-    isPassword?: boolean,
 }
 
-export const FormTextInput: React.FC<FormInputTextProps> = ({
+export const FormPhoneNumber: React.FC<FormInputTextProps> = ({
     control, 
     name,
     placeholder,
-    isPassword,
 }) => {
     return (
         <Animated.View 
@@ -30,8 +28,8 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
                         <TextInput
                             className='bg-black/5 p-5 rounded-2xl'
                             placeholder={placeholder}
+                            keyboardType="numeric"
                             placeholderTextColor={'gray'}
-                            secureTextEntry={isPassword ? isPassword : false}
                             value={value}
                             onChangeText={onChange}
                         />

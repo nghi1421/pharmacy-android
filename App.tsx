@@ -7,14 +7,30 @@ import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 const queryClient = new QueryClient()
 
 const Stack = createNativeStackNavigator();
 PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
+export type AuthType = {
+  isAuthenticated: boolean
+  logIn: () => void
+  logOut: () => void
+}
+
+export const AuthContext = React.createContext<AuthType>({
+  isAuthenticated: false,
+  logIn: () => {},
+  logOut: () => {},
+});
+
 function App() {
-  const isAuthenticated = false;
+  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
+  const logIn = () => setIsAuthenticated(true);
+  const logOut = () => setIsAuthenticated(false);
+
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
     const enabled =
@@ -30,7 +46,7 @@ function App() {
     const token = await messaging().getToken();
     console.log('My token:' , token);
   }
-  
+
   React.useEffect(() => {
     requestUserPermission()
     getToken()
@@ -66,23 +82,36 @@ function App() {
   }, [])
 
   return (
-    <NavigationContainer>
-      <QueryClientProvider client={queryClient}>
-        
-            <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-              {
-                isAuthenticated 
-                  ?
-                    <Stack.Screen name="main" component={MainScreen} />
-                  :
-                  <>
-                    <Stack.Screen name="login" component={LoginScreen} />
-                    <Stack.Screen name="signin" component={SignUpScreen} />
-                  </>
-              }
-          </Stack.Navigator>
-      </QueryClientProvider>
-    </NavigationContainer>
+    <AuthContext.Provider value={{ isAuthenticated, logIn, logOut }}>
+      <NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+          {
+            !isAuthenticated
+              ?
+              <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="login" component={LoginScreen} />
+                      <Stack.Screen name="signin" component={SignUpScreen} />
+              </Stack.Navigator>
+              :
+              <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="main" component={MainScreen} />
+              </Stack.Navigator>
+            }
+              {/* <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
+                {
+                  isAuthenticated 
+                    ?
+                      <Stack.Screen name="main" component={MainScreen} />
+                    :
+                    <>
+                      <Stack.Screen name="login" component={LoginScreen} />
+                      <Stack.Screen name="signin" component={SignUpScreen} />
+                    </>
+                }
+            </Stack.Navigator> */}
+        </QueryClientProvider>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
 
