@@ -1,7 +1,12 @@
 export interface HistoryItem {
+    id: string
     time: string
     staffName: string
-    total: string
+    total: string;
+    totalWithoutVat: string
+    vat: string
+    prescriptionId: string
+    historyDetail: HistoryDetail[]
 }
 
 export interface HistoryExpandable {
@@ -13,4 +18,10 @@ export interface HistoryExpandable {
 export interface History {
     title: string
     histories: HistoryItem[]
+}
+
+export interface HistoryDetail {
+    drugName: string
+    quantity: string
+    unitPrice: string
 }

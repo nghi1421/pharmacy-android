@@ -87,7 +87,6 @@ export default function SignupScreen() {
   }
 
   const checkVerify = () => {
-    console.log(otp.join(''));
     if (otp.join('') === checkOtp) {
       setIsVeriry(true)
     }

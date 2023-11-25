@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { DetailScreen } from './DetailScreen';
 import { HistoryScreen } from './HistoryScreen';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SettingScreen } from './SettingScreen';

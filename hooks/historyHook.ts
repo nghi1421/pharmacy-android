@@ -9,9 +9,7 @@ import { AuthContext } from "../App";
 function createData({ title, histories }: History): HistoryExpandable {
     return {
         title: title,
-        histories: histories.map(history => {
-            return { staffName: history.staffName, time: history.time, total: history.total}
-        }),
+        histories: histories,
         isExpanded: true
     }
 }
@@ -23,7 +21,6 @@ const useGetHistory = () => {
         .get(`${GET_HISTORIES_URL}${customer?.phoneNumber}`)
             .then((response) => {  
                 if (response.data.data)
-                console.log(response.data.data)
                 return response.data.data.map((data: History) => createData(data))
             return undefined
         }),

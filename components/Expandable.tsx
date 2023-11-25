@@ -63,7 +63,7 @@ export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
                         <TouchableOpacity
                             key={`${data.title}-history-${index}`}
                             className='px-3 py-2 flex-row bg-white'
-                            onPress={() => navigation.navigate('detail')}
+                            onPress={() => navigation.navigate('detail', {params: { history: history }})}
                         >
                             <View className="text-center justify-center">
                                 <FontAwesome

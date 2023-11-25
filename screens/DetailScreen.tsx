@@ -1,14 +1,24 @@
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import Animated, { FadeInDown, FadeInRight } from "react-native-reanimated";
+import Animated, { FadeInRight } from "react-native-reanimated";
+import {  HistoryItem } from "../types/History";
 
 export function DetailScreen() {
     const navigation = useNavigation();
-
+    const [history, setHistory] = useState<HistoryItem|null>(null)
     const handleGoBack = () => {
         navigation.goBack(); 
     };
+
+    useEffect(() => {
+        //@ts-ignore
+        const historyData = navigation.getState().routes.find(route => route.name === 'detail')?.params.params.history
+        if (historyData) {
+            setHistory(historyData)
+        }
+    }, [])
     
     return (
         <>
@@ -20,7 +30,10 @@ export function DetailScreen() {
                     Chi tiết đơn hàng
                 </Text>
             </View>
-            <Animated.View 
+            {
+                history
+                    ?
+                <Animated.View 
                 entering={FadeInRight.duration(200).springify()} 
                 className="w-full"
             >
@@ -34,67 +47,67 @@ export function DetailScreen() {
                     </View>
                     <View className='flex-col py-4 px-3'>
                         <Text className='text-xl uppercase text-slate-500 opacity-70 border-b border-slate-300'>Đơn mua thuốc </Text>
-                        <Text className='text-2xl font-semibold text-slate-600'>{`${'220,000 VND'}`}</Text>
+                        <Text className='text-2xl font-semibold text-slate-600'>{history.total}</Text>
                     </View>
 
                 </View>
               
                 <View className='mx-6 -mt-4 bg-slate-500 h-[1px]'></View>
-                <View className='border border-slate-300 mx-6 rounded-lg' >
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 pt-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>{`Mã đơn hàng`}</Text> 
-                        <Text className='pb-2 pt-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{1}</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>{`Nhân viên bán`}</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{'Nguyễn Thanh Nghị'}</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>{`Thời gian bán hàng`}</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{'22/11/2023 23:20:22'}</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>{`Mã đơn thuốc`}</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{'DT2145'}</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 px-1 flex-1 text-lg text-center uppercase text-slate-600 font-bold'>Chi tiết</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end border-b border-slate-300'>
-                        <Text className='pb-2 px-1 flex-2 text-slate-600 text-sm font-bold'>Tên thuốc</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-center text-slate-600 text-sm font-bold'>Số lượng</Text>
-                        <Text className='pb-2 px-1 flex-2 text-right text-slate-600 text-sm font-bold'>Đơn giá</Text>
-                    </View>
+                    <View className='border border-slate-300 mx-6 rounded-lg' >
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 pt-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>Mã đơn hàng</Text> 
+                            <Text className='pb-2 pt-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{history.id}</Text>
+                        </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>Nhân viên bán</Text> 
+                            <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{history.staffName}</Text>
+                        </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>Thời gian bán hàng</Text> 
+                            <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{history.time}</Text>
+                        </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 px-1 flex-1 text-lg opacity-80 text-slate-500'>Mã đơn thuốc</Text> 
+                            <Text className='pb-2 px-1 flex-1 text-lg text-right text-slate-600 font-bold'>{history.prescriptionId}</Text>
+                        </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 px-1 flex-1 text-lg text-center uppercase text-slate-600 font-bold'>Chi tiết</Text>
+                        </View>
+                        <View className='flex-row mx-1 align-items-end border-b border-slate-300'>
+                            <Text className='pb-2 px-1 flex-1 text-slate-600 text-sm font-bold'>Tên thuốc</Text> 
+                            <Text className='pb-2 px-1 flex-1 text-center text-slate-600 text-sm font-bold'>Số lượng</Text>
+                            <Text className='pb-2 px-1 flex-1 text-right text-slate-600 text-sm font-bold'>Đơn giá</Text>
+                        </View>
+                            {
+                                history.historyDetail.map((historyDetailData) => (
+                                    <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
+                                        <Text className='pb-2 px-1 flex-1 m-auto text-sm text-slate-500'>{historyDetailData.drugName}</Text> 
+                                        <Text className='pb-2 px-1 flex-1 m-auto text-sm text-center text-slate-500 font-bold'>{historyDetailData.quantity}</Text>
+                                        <Text className='pb-2 px-1 flex-1 m-auto text-sm text-right text-slate-500 font-bold'>{historyDetailData.unitPrice}</Text>
+                                    </View>
+                                ))
+                            }
 
-                    <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
-                        <Text className='pb-2 px-1 flex-2 text-sm text-slate-500'>{`Thuốc A`}</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-sm text-center text-slate-500 font-bold'>1</Text>
-                        <Text className='pb-2 px-1 flex-2 text-sm text-right text-slate-500 font-bold'>20,000đ</Text>
-                    </View>
-                    <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
-                        <Text className='pb-2 px-1 flex-1 text-sm text-slate-500'>{`Thuốc A`}</Text> 
-                        <Text className='pb-2 px-1 flex-1 text-sm text-center text-slate-500 font-bold'>1</Text>
-                        <Text className='pb-2 px-1 flex-1 text-sm text-right text-slate-500 font-bold'>20,000đ</Text>
-                    </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tổng tiền (chưa VAT)</Text>
+                            <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>{history.totalWithoutVat}</Text>
+                        </View>
 
-                    {/* pay */}
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tổng tiền (chưa VAT)</Text>
-                        <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>20,000đ</Text>
-                    </View>
+                        <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
+                            <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tiền thuế</Text>
+                            <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>{history.vat}</Text>
+                        </View>
 
-                    <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
-                        <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tiền thuế</Text>
-                        <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>20,000đ</Text>
-                    </View>
+                        <View className='flex-row mx-1 align-items-end'>
+                            <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tổng tiền</Text>
+                            <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>{history.total}</Text>
+                        </View>
 
-                    <View className='flex-row mx-1 align-items-end'>
-                        <Text className='pb-2 pt-1 px-1 flex-1 text-base text-left text-slate-600 font-bold'>Tổng tiền</Text>
-                        <Text className='pb-2 pt-1 px-1 flex-2 text-base text-right text-slate-600 font-bold'>20,000đ</Text>
                     </View>
-
-                </View>
-            </Animated.View>
+                </Animated.View>
+                    :
+                    <><Text>No data found</Text></>
+            }
         </>
         
     )
