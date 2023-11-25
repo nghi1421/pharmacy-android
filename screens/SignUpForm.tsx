@@ -55,7 +55,11 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
         .max(255),
 })
 
-export const SignUpForm = () => {
+interface SignUpProps {
+    phoneNumher: string;
+}
+
+export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
     const {
         control: customerControl,
         handleSubmit: handleSubmitCustomer,

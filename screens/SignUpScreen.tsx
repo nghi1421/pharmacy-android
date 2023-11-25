@@ -56,12 +56,11 @@ export default function SignupScreen() {
     resolver: yupResolver(phoneNumberValidate),
   })
 
-  const verifyPhoneNumber = useVerifyPhoneNumber()
+  const verifyPhoneNumber = useVerifyPhoneNumber(setError)
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const inputRefs = useRef<TextInputProp[]>(Array(otp.length).fill({}));
   const [checkOtp, setCheckOtp] = useState<string>('')
   const [isVeriry, setIsVeriry] = useState<boolean>(false)
-  const [isHaveInfor, setIsHaveInfor] = useState<boolean>(false)
   const [otpError, setOtpError] = useState<string>('')
   const onSubmit = async (data: VerifyPhoneNumberForm) => { 
     verifyPhoneNumber.mutate(data)
@@ -97,18 +96,7 @@ export default function SignupScreen() {
 
   useEffect(() => {
     if (verifyPhoneNumber.data) {
-      if (verifyPhoneNumber.data.errorMessage) {
-        setError('phoneNumber', {type: 'custom', message: verifyPhoneNumber.data.errorMessage})
-      }
-      else {
-        if (customer) {
-            setIsHaveInfor(true)
-        }
-        else {
-            setIsHaveInfor(false)
-        }
-        setCheckOtp(verifyPhoneNumber.data)
-      }
+      setCheckOtp(verifyPhoneNumber.data)
     }
    
   }, [verifyPhoneNumber.data])
@@ -135,11 +123,11 @@ export default function SignupScreen() {
                 ?
                 isVeriry
                   ?
-                    isHaveInfor
+                    customer
                       ?
-                    <SignUpFormExistsData phoneNumher={watch('phoneNumber')} />
+                        <SignUpFormExistsData phoneNumher={watch('phoneNumber')} />
                       :
-                        <SignUpForm/>
+                        <SignUpForm phoneNumher={watch('phoneNumber')}/>
                   :
                   <>
                     <Animated.View 

@@ -6,6 +6,7 @@ import { CreateCustomerForm } from "../screens/SignUpForm"
 import { useContext } from "react"
 import { AuthContext } from "../App"
 import { LoginForm } from "../screens/LoginScreen"
+import { UseFormSetError } from "react-hook-form"
 
 const useSignUp = () => {
     const { logIn } = useContext(AuthContext)
@@ -24,22 +25,25 @@ const useSignUp = () => {
         })
 }
 
-const useVerifyPhoneNumber = () => {
-    const {  setCustomer } = useContext(AuthContext)
+const useVerifyPhoneNumber = (setError: UseFormSetError<any>) => {
+    const { setCustomer } = useContext(AuthContext)
     return useMutation({
         mutationFn: async (data: VerifyPhoneNumberForm) =>{
            return await axiosClient
             .post(VERIFY_PHONE_NUMBER_URL, data)
             .then(async (response) => {
                 if (response.data.data) {
-                    setCustomer(response.data.data.customer)
+                    setCustomer(response.data.data)
                     return response.data.otpCode
                 }
                 setCustomer(null)
                 return response.data.otpCode
+            
             })
             .catch(error => {
-                console.log(error)
+                if (error.response.data.errorMessage) {
+                    setError('phoneNumber', { type: 'custom', message: error.response.data.errorMessage})
+                }
             })}
         })
 }
