@@ -18,6 +18,10 @@ const getCustomer = async () => {
     }
 }
 
+const removeCustomer = async () => {
+    await AsyncStorage.removeItem('customer')
+}
+
 const setOtp = async (otp: string) => {
     try {
         await AsyncStorage.setItem('otp', otp);
@@ -36,5 +40,9 @@ const getOtp = async () => {
 }
 
 export {
-    setCustomer, getCustomer, setOtp, getOtp
+    setCustomer,
+    getCustomer,
+    setOtp,
+    getOtp,
+    removeCustomer
 }

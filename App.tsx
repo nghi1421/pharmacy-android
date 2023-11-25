@@ -7,7 +7,6 @@ import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 const queryClient = new QueryClient()
 

@@ -3,7 +3,7 @@ import axiosClient from "../utils/axios"
 import { SIGN_IN_CUSTOMER_URL, VERIFY_PHONE_NUMBER_URL } from "../utils/constants"
 import { VerifyPhoneNumberForm } from "../screens/SignUpScreen"
 import axios from "axios"
-import { setCustomer } from "../utils/helper"
+import { removeCustomer, setCustomer } from "../utils/helper"
 
 const useSignIn = () => {
     return useMutation({
@@ -24,11 +24,12 @@ const useVerifyPhoneNumber = () => {
            return await axiosClient
             .post(VERIFY_PHONE_NUMBER_URL, data)
             .then(async (response) => {
-                if (response.data.otpCode) {
+                if (response.data.data) {
                     setCustomer(response.data.data)
                     return response.data.otpCode
                 }
-                response.data
+                removeCustomer()
+                return response.data.otpCode
             })
             .catch(error => {
                 console.log(error)
