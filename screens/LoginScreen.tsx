@@ -3,80 +3,138 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import { FormTextInput } from '../components/FomTextInput';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import yup from '../utils/yup';
+import * as Yup from 'yup';
+import { useLogin } from '../hooks/authenticationHook';
+
+export interface LoginForm {
+    username: string
+    password: string
+}
+
+const defaultValues = {
+    username: "",
+    password: "",
+};
+
+const loginFormValidate: Yup.ObjectSchema<LoginForm> = yup.object({
+    username: yup
+        .string()
+        .required('Tên đăng nhập bắt buộc.')
+        .max(255),
+    password: yup
+        .string()
+        .required('Mật khẩu bắt buộc.')
+        .max(255),
+})
 
 export default function LoginScreen() {
+    const login = useLogin();
+    const {
+        control,
+        handleSubmit,
+    } = useForm<LoginForm>({
+        defaultValues: defaultValues,
+        resolver: yupResolver(loginFormValidate)
+    })
+    
+    const onSubmit = (data: LoginForm) => [
+        login.mutate(data)
+    ]
     const navigation = useNavigation();
-  return (
-    <View className="bg-white h-full w-full">
-        <StatusBar style="light" />
-        <Image className="h-full w-full absolute" source={require('../assets/images/background.png')} />
+    return (
+        <View className="bg-white h-full w-full">
+            <StatusBar style="light" />
+            <Image className="h-full w-full absolute" source={require('../assets/images/background.png')} />
 
-        <View className="flex-row justify-around w-full absolute">
-            <Animated.Image 
-                entering={FadeInUp.delay(200).duration(1000).springify()} 
-                source={require('../assets/images/light.png')} 
-                className="h-[225] w-[90]" 
-            />
-            <Animated.Image 
-                entering={FadeInUp.delay(400).duration(1000).springify()} 
-                source={require('../assets/images/light.png')} 
-                className="h-[160] w-[65] opacity-75" 
-            />
-        </View>
-
-        <View className="h-full w-full flex justify-around pt-40 pb-10">
-            
-            <View className="flex items-center">
-                <Animated.Text 
-                    entering={FadeInUp.duration(1000).springify()} 
-                    className="text-white font-bold tracking-wider text-5xl">
-                        Đăng nhập
-                </Animated.Text>
+            <View className="flex-row justify-around w-full absolute">
+                <Animated.Image 
+                    entering={FadeInUp.delay(200).duration(1000).springify()} 
+                    source={require('../assets/images/light.png')} 
+                    className="h-[225] w-[90]" 
+                />
+                <Animated.Image 
+                    entering={FadeInUp.delay(400).duration(1000).springify()} 
+                    source={require('../assets/images/light.png')} 
+                    className="h-[160] w-[65] opacity-75" 
+                />
             </View>
 
-            <View className="flex items-center mx-5 space-y-4">
-                <Animated.View 
-                    entering={FadeInDown.duration(1000).springify()} 
-                    className="bg-black/5 p-5 rounded-2xl w-full">
+            <View className="h-full w-full flex justify-around pt-40 pb-10">
+                
+                <View className="flex items-center">
+                    <Animated.Text 
+                        entering={FadeInUp.duration(1000).springify()} 
+                        className="text-white font-bold tracking-wider text-5xl">
+                            Đăng nhập
+                    </Animated.Text>
+                </View>
 
-                    <TextInput
-                        placeholder="Tên đăng nhập"
-                        placeholderTextColor={'gray'}
-                    />
-                </Animated.View>
-                <Animated.View 
-                    entering={FadeInDown.delay(200).duration(1000).springify()} 
-                    className="bg-black/5 p-5 rounded-2xl w-full mb-3">
+                <View className="flex-col items-center mx-5 space-y-4">
+                    <Animated.View 
+                        entering={FadeInDown.duration(1000).springify()} 
+                        className="p-2 rounded-2xl w-full">
+                        <FormTextInput
+                            control={control}
+                            name='username'
+                            placeholder='Tên đăng nhập'
+                        />
+                    </Animated.View>
+                    <Animated.View 
+                        entering={FadeInDown.duration(1000).springify()} 
+                        className="p-2 rounded-2xl w-full">
+                          <FormTextInput
+                         control={control}
+                            name='password'
+                            isPassword={ true }
+                            placeholder='Tên đăng nhập'
+                        />
+                    </Animated.View>
+                    {/* <Animated.View 
+                        entering={FadeInDown.duration(1000).springify()} 
+                        className="bg-black/5 p-5 rounded-2xl w-full">
 
-                    <TextInput
-                        placeholder="Mật khẩu"
-                        placeholderTextColor={'gray'}
-                        secureTextEntry
-                    />
-                </Animated.View>
+                        <TextInput
+                            placeholder="Tên đăng nhập"
+                            placeholderTextColor={'gray'}
+                        />
+                    </Animated.View>
+                    <Animated.View 
+                        entering={FadeInDown.delay(200).duration(1000).springify()} 
+                        className="bg-black/5 p-5 rounded-2xl w-full mb-3">
 
-                <Animated.View 
-                    className="w-full" 
-                    entering={FadeInDown.delay(400).duration(1000).springify()}>
+                        <TextInput
+                            placeholder="Mật khẩu"
+                            placeholderTextColor={'gray'}
+                            secureTextEntry
+                        />
+                    </Animated.View> */}
 
-                    <TouchableOpacity 
-                        onPress={()=> navigation.push('main')}
-                        className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
-                    >
-                        <Text className="text-xl font-bold text-white text-center">Đăng nhập</Text>
-                    </TouchableOpacity>
-                </Animated.View>
+                    <Animated.View 
+                        className="w-full" 
+                        entering={FadeInDown.delay(400).duration(1000).springify()}>
 
-                <Animated.View 
-                    entering={FadeInDown.delay(600).duration(1000).springify()} 
-                    className="flex-row justify-center">
-                    <Text>Bạn chưa có tài khoản? </Text>
-                    <TouchableOpacity onPress={()=> navigation.push('signin')}>
-                        <Text className="text-sky-600">Đăng kí</Text>
-                    </TouchableOpacity>
-                </Animated.View>
+                        <TouchableOpacity 
+                            onPress={handleSubmit(onSubmit)}
+                            className="w-full bg-sky-400 p-3 rounded-2xl mb-3"
+                        >
+                            <Text className="text-xl font-bold text-white text-center">Đăng nhập</Text>
+                        </TouchableOpacity>
+                    </Animated.View>
+
+                    <Animated.View 
+                        entering={FadeInDown.delay(600).duration(1000).springify()} 
+                        className="flex-row justify-center">
+                        <Text>Bạn chưa có tài khoản? </Text>
+                        <TouchableOpacity onPress={()=> navigation.push('signin')}>
+                            <Text className="text-sky-600">Đăng kí</Text>
+                        </TouchableOpacity>
+                    </Animated.View>
+                </View>
             </View>
         </View>
-    </View>
   )
 }

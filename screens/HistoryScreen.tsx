@@ -1,54 +1,13 @@
-import { LayoutAnimation, Platform, ScrollView, Text, UIManager, View } from "react-native";
+import { ActivityIndicator, LayoutAnimation, Platform, ScrollView, Text, UIManager, View } from "react-native";
 import { Expandable } from "../components/Expandable";
 import { useEffect, useState } from "react";
 import { HistoryExpandable, HistoryItem } from "../types/History";
 import { getCustomer } from "../utils/helper";
+import { useGetHistory } from "../hooks/historyHook";
 
 export function HistoryScreen() {
-    const [historiesExpand, setHistoryExpand] = useState<HistoryExpandable[]>([{
-        isExpanded: true,
-        title: '09/2023',
-        histories: [{
-            staffName: 'Nguyễn Thanh Nghị',
-            total: '220,000 VND',
-            time: '22/11/2023'
-        }]
-        },
-        {
-            isExpanded: true,
-            title: '10/2023',
-            histories: [{
-                staffName: 'Nguyễn Thanh Nghị',
-                total: '220,000 VND',
-                time: '22/11/2023'
-            }]
-        },
-        {
-            isExpanded: true,
-            title: '11/2023',
-            histories: [{
-                staffName: 'Nguyễn Thanh Nghị',
-                total: '220,000 VND',
-                time: '19/11/2023'
-            },
-            {
-                staffName: 'Nguyễn Thanh Nghị',
-                total: '320,000 VND',
-                time: '20/11/2023'
-            },
-            {
-                staffName: 'Nguyễn Thanh Nghị',
-                total: '542,000 VND',
-                time: '22/11/2023'
-            },
-            {
-                staffName: 'Nguyễn Thanh Nghị',
-                total: '542,000 VND',
-                time: '22/11/2023'
-            }
-            ]
-        }]
-    )
+    const { isLoading, data } = useGetHistory()
+    const [historiesExpand, setHistoryExpand] = useState<HistoryExpandable[]>([])
 
     const updateLayout = (index: number) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
@@ -62,18 +21,20 @@ export function HistoryScreen() {
     }
 
     useEffect(() => {
-        let phoneNumber = ''
-        getCustomer().then(customer => {
-            phoneNumber = customer.phoneNumber
-        })
-        console.log('Phone number', phoneNumber)
-    }, [])
+        if (data) {
+            setHistoryExpand(data)    
+        }
+    }, [data])
 
     return (
-        <ScrollView>
+        <ScrollView >
             {
+                !data
+                ?
+                    <ActivityIndicator size="large" />
+                :
                 historiesExpand.map((historyExpand, index) => (
-                    <Expandable
+                    <Expandable 
                     onClick={
                         () => {
                             updateLayout(index)

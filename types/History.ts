@@ -9,3 +9,8 @@ export interface HistoryExpandable {
     title: string
     histories: HistoryItem[]
 }
+
+export interface History {
+    title: string
+    histories: HistoryItem[]
+}

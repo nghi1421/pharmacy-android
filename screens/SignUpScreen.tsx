@@ -45,11 +45,12 @@ const phoneNumberValidate: Yup.ObjectSchema<VerifyPhoneNumberForm> = yup.object(
 
 export default function SignupScreen() {
   const navigation = useNavigation();
-  const { isAuthenticated, logIn } = useContext(AuthContext);
+  const { customer } = useContext(AuthContext);
   const {
     control: phoneNumberControl,
     handleSubmit: handleSubmitPhoneNumber,
     setError,
+    watch
   } = useForm<VerifyPhoneNumberForm>({
     defaultValues: { phoneNumber: '' },
     resolver: yupResolver(phoneNumberValidate),
@@ -101,14 +102,12 @@ export default function SignupScreen() {
         setError('phoneNumber', {type: 'custom', message: verifyPhoneNumber.data.errorMessage})
       }
       else {
-        getCustomer().then((customer) => {
-            if (customer) {
-              setIsHaveInfor(true)
-            }
-            else {
-              setIsHaveInfor(false)
-            }
-        })
+        if (customer) {
+            setIsHaveInfor(true)
+        }
+        else {
+            setIsHaveInfor(false)
+        }
         setCheckOtp(verifyPhoneNumber.data)
       }
     }
@@ -139,7 +138,7 @@ export default function SignupScreen() {
                   ?
                     isHaveInfor
                       ?
-                        <SignUpFormExistsData/>
+                    <SignUpFormExistsData phoneNumher={watch('phoneNumber')} />
                       :
                         <SignUpForm/>
                   :
@@ -170,7 +169,6 @@ export default function SignupScreen() {
                       <TouchableOpacity className="flex-1 mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
                         onPress={() => {
                           checkVerify();
-                    
                         }}
                       >
                           <Text className="text-xl font-bold text-white text-center">Xác thực</Text>

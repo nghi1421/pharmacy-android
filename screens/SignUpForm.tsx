@@ -8,23 +8,25 @@ import yup from "../utils/yup"
 import * as Yup from 'yup';
 
 export interface CreateCustomerForm {
-  username: string
-  password: string
-  confirmationPassword: string
-  name: string;
-  phoneNumber: string;
-  address: string;
-  gender: string;
+    username: string
+    password: string
+    confirmationPassword: string
+    name: string;
+    phoneNumber: string;
+    address: string;
+    gender: string;
+    deviceToken: string
 }
 
 const defaultValues = {
-  username: "",
-  password: "",
-  confirmationPassword: "",
-  name: "",
-  phoneNumber: "",
-  gender: '1',
-  address: ''
+    username: "",
+    password: "",
+    confirmationPassword: "",
+    name: "",
+    phoneNumber: "",
+    gender: '1',
+    address: '',
+    deviceToken: ''
 };
 
 //@ts-ignore

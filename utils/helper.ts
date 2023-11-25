@@ -39,10 +39,21 @@ const getOtp = async () => {
     }
 }
 
+const setDeviceToken = async (token: string) => {
+    await AsyncStorage.setItem('deviceToken', token);
+}
+
+const getDeviceToken = async () => {
+    const deviceToken = await AsyncStorage.getItem('deviceToken');
+    return deviceToken;
+}
+
 export {
     setCustomer,
     getCustomer,
     setOtp,
     getOtp,
-    removeCustomer
+    removeCustomer,
+    setDeviceToken,
+    getDeviceToken
 }

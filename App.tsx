@@ -7,6 +7,8 @@ import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { setDeviceToken } from './utils/helper';
+import { Customer } from './types/User';
 
 const queryClient = new QueryClient()
 
@@ -17,16 +19,21 @@ export type AuthType = {
   isAuthenticated: boolean
   logIn: () => void
   logOut: () => void
+  customer: null | Customer
+  setCustomer: (c: Customer|null) => void
 }
 
 export const AuthContext = React.createContext<AuthType>({
   isAuthenticated: false,
-  logIn: () => {},
-  logOut: () => {},
+  logIn: () => { },
+  logOut: () => { },
+  customer: null,
+  setCustomer: (c: Customer|null) => {}
 });
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
+  const [customer, setCustomer] = React.useState<Customer|null>(null);
   const logIn = () => setIsAuthenticated(true);
   const logOut = () => setIsAuthenticated(false);
 
@@ -43,6 +50,7 @@ function App() {
 
   const getToken = async () => {
     const token = await messaging().getToken();
+    setDeviceToken(token);
     console.log('My token:' , token);
   }
 
@@ -81,7 +89,7 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logIn, logOut }}>
+    <AuthContext.Provider value={{ isAuthenticated, logIn, logOut, customer, setCustomer }}>
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
           {
