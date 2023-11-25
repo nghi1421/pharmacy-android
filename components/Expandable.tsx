@@ -3,12 +3,14 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { HistoryExpandable } from "../types/History";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 interface ExpandableProps {
     data: HistoryExpandable,
     onClick: () => void
 }
-export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
+export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
+    const navigation = useNavigation()
     const [layoutHeight, setLayoutHeight] = useState<number|null>(0)
     const rotate = useSharedValue(180);
 
@@ -45,7 +47,7 @@ export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
                 <Text
                     className="text-2xl font-bold"
                 >   
-                    { `Tháng ${data.title} `}
+                    { data.title }
                 </Text>
                 <Animated.View
                     style={[animatedStyles]}
@@ -61,6 +63,7 @@ export const Expandable: React.FC<ExpandableProps> = ({data, onClick}) => {
                         <TouchableOpacity
                             key={`${data.title}-history-${index}`}
                             className='px-3 py-2 flex-row bg-white'
+                            onPress={() => navigation.navigate('detail')}
                         >
                             <View className="text-center justify-center">
                                 <FontAwesome

@@ -9,6 +9,7 @@ import messaging from '@react-native-firebase/messaging';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { setDeviceToken } from './utils/helper';
 import { Customer } from './types/User';
+import { DetailScreen } from './screens/DetailScreen';
 
 const queryClient = new QueryClient()
 
@@ -102,6 +103,7 @@ function App() {
               :
               <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="main" component={MainScreen} />
+                      <Stack.Screen name="detail" component={DetailScreen} />
               </Stack.Navigator>
             }
         </QueryClientProvider>

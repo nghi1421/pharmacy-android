@@ -2,11 +2,10 @@ import { ActivityIndicator, LayoutAnimation, Platform, ScrollView, Text, UIManag
 import { Expandable } from "../components/Expandable";
 import { useEffect, useState } from "react";
 import { HistoryExpandable, HistoryItem } from "../types/History";
-import { getCustomer } from "../utils/helper";
 import { useGetHistory } from "../hooks/historyHook";
 
 export function HistoryScreen() {
-    const { isLoading, data } = useGetHistory()
+    const { data } = useGetHistory()
     const [historiesExpand, setHistoryExpand] = useState<HistoryExpandable[]>([])
 
     const updateLayout = (index: number) => {
@@ -35,13 +34,13 @@ export function HistoryScreen() {
                 :
                 historiesExpand.map((historyExpand, index) => (
                     <Expandable 
-                    onClick={
-                        () => {
-                            updateLayout(index)
+                        onClick={
+                            () => {
+                                updateLayout(index)
+                            }
                         }
-                    }
-                    data={ historyExpand }
-                ></Expandable>
+                        data={ historyExpand }
+                    />
                 ))
             }
         </ScrollView>
