@@ -200,9 +200,9 @@ export default function SignupScreen() {
                 </>
             }
               <Animated.View 
-                  entering={FadeInDown.delay(600).duration(1000).springify()} 
-                  className="flex-row justify-center">
-
+                entering={FadeInDown.delay(600).duration(1000).springify()} 
+                className="flex-row justify-center"
+            >
                   <Text>Bạn đã có tài khoản? </Text>
                   <TouchableOpacity onPress={()=> navigation.push('login')}>
                       <Text className="text-sky-600">Đăng nhập</Text>
@@ -212,6 +212,5 @@ export default function SignupScreen() {
         </View>
       </View>
     </KeyboardAvoidingView>
-    
 )
 }
