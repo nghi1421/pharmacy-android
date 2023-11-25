@@ -1,7 +1,8 @@
 import { LayoutAnimation, Platform, ScrollView, Text, UIManager, View } from "react-native";
 import { Expandable } from "../components/Expandable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HistoryExpandable, HistoryItem } from "../types/History";
+import { getCustomer } from "../utils/helper";
 
 export function HistoryScreen() {
     const [historiesExpand, setHistoryExpand] = useState<HistoryExpandable[]>([{
@@ -59,6 +60,14 @@ export function HistoryScreen() {
     if (Platform.OS === 'android') {
         UIManager.setLayoutAnimationEnabledExperimental(true);
     }
+
+    useEffect(() => {
+        let phoneNumber = ''
+        getCustomer().then(customer => {
+            phoneNumber = customer.phoneNumber
+        })
+        console.log('Phone number', phoneNumber)
+    }, [])
 
     return (
         <ScrollView>

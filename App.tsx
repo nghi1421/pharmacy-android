@@ -26,7 +26,7 @@ export const AuthContext = React.createContext<AuthType>({
 });
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(true);
   const logIn = () => setIsAuthenticated(true);
   const logOut = () => setIsAuthenticated(false);
 
@@ -88,26 +88,14 @@ function App() {
             !isAuthenticated
               ?
               <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-                      <Stack.Screen name="login" component={LoginScreen} />
-                      <Stack.Screen name="signin" component={SignUpScreen} />
+                    <Stack.Screen name="login" component={LoginScreen} />
+                    <Stack.Screen name="signin" component={SignUpScreen} />
               </Stack.Navigator>
               :
               <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="main" component={MainScreen} />
               </Stack.Navigator>
             }
-              {/* <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-                {
-                  isAuthenticated 
-                    ?
-                      <Stack.Screen name="main" component={MainScreen} />
-                    :
-                    <>
-                      <Stack.Screen name="login" component={LoginScreen} />
-                      <Stack.Screen name="signin" component={SignUpScreen} />
-                    </>
-                }
-            </Stack.Navigator> */}
         </QueryClientProvider>
       </NavigationContainer>
     </AuthContext.Provider>

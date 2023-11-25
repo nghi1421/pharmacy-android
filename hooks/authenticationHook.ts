@@ -2,12 +2,13 @@ import { useMutation, useQuery } from "react-query"
 import axiosClient from "../utils/axios"
 import { SIGN_IN_CUSTOMER_URL, VERIFY_PHONE_NUMBER_URL } from "../utils/constants"
 import { VerifyPhoneNumberForm } from "../screens/SignUpScreen"
-import axios from "axios"
 import { removeCustomer, setCustomer } from "../utils/helper"
+import { SignUpExistDataForm } from "../screens/SignUpExistsData"
+import { CreateCustomerForm } from "../screens/SignUpForm"
 
 const useSignIn = () => {
     return useMutation({
-        mutationFn: () => axiosClient
+        mutationFn: (data: SignUpExistDataForm| CreateCustomerForm) => axiosClient
             .post(`${SIGN_IN_CUSTOMER_URL}`)
             .then((response) => {
                 if (response.data.message) {
@@ -37,18 +38,9 @@ const useVerifyPhoneNumber = () => {
         })
 }
 
-const useTest = () => {
 
-  return useQuery({
-    queryFn: () => axios
-      .get('http://192.168.1.27:3000/api/test-api')
-      .then((response)=> {
-        return response.data
-      }),
-  })
-};
+
 export {
     useSignIn,
     useVerifyPhoneNumber,
-    useTest
 }

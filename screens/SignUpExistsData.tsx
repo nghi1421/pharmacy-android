@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import yup from "../utils/yup"
 import * as Yup from 'yup';
 
-export interface CreateCustomerForm {
+export interface SignUpExistDataForm {
   username: string
   password: string
   confirmationPassword: string
@@ -19,7 +19,7 @@ const defaultValues = {
   confirmationPassword: "",
 };
 
-const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
+const customerFormValidate: Yup.ObjectSchema<SignUpExistDataForm> = yup.object({
     username: yup
         .string()
         .required('Tên đăng nhập bắt buộc.')
@@ -40,12 +40,12 @@ export const SignUpFormExistsData = () => {
         control: customerControl,
         handleSubmit: handleSubmitCustomer,
         setError
-    } = useForm<CreateCustomerForm>({
+    } = useForm<SignUpExistDataForm>({
         defaultValues: defaultValues,
         resolver: yupResolver(customerFormValidate)
     })
 
-    const onSubmitCustomer = async (data: CreateCustomerForm) => { 
+    const onSubmitCustomer = async (data: SignUpExistDataForm) => { 
         console.log(data)
         // if (isHaveInfor) {
         //   logIn();
@@ -58,8 +58,7 @@ export const SignUpFormExistsData = () => {
     }
     
     return (
-        <
-        >
+        <>
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
                 className="p-2 rounded-2xl w-full">
