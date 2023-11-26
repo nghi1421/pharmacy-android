@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dropdown } from 'react-native-element-dropdown';
 import { DropdownItem } from '../types/DropdownItem';
 import { CustomDropdown } from '../components/CustomDropdown';
+import { Address } from '../components/Address';
 
 export interface LoginForm {
     username: string
@@ -48,6 +49,7 @@ const loginFormValidate: Yup.ObjectSchema<LoginForm> = yup.object({
 
 export default function LoginScreen() {
     const login = useLogin();
+    const navigation = useNavigation();
     const {
         control,
         handleSubmit,
@@ -55,12 +57,15 @@ export default function LoginScreen() {
         defaultValues: defaultValues,
         resolver: yupResolver(loginFormValidate)
     })
-    const [value, setValue] = useState<DropdownItem|null>(null);
+    const [address, setAddress] = useState<string>('')
 
-    const onSubmit = (data: LoginForm) => [
+    useEffect(() => {
+        console.log(address);
+    })
+    const onSubmit = (data: LoginForm) => {
         login.mutate(data)
-    ]
-    const navigation = useNavigation();
+    }
+        
     return (
     <SafeAreaView
       className='bg-white'
@@ -107,16 +112,13 @@ export default function LoginScreen() {
                             />
                         </Animated.View>
                         
-                        <View className='w-full p-2'>
-                            <CustomDropdown
-                                data={data}
-                                placeholder='Chọn tỉnh thành'
-                                setSelectItem={setValue}
-                                selectItem={null}
-                            />
-                                
-                        </View>
+                        <Animated.View 
+                            entering={FadeInDown.duration(1000).springify()} 
+                            className="p-2 rounded-2xl w-full">
+                            <Address setAddress={setAddress} />  
 
+                        </Animated.View>
+                                
                         <Animated.View 
                             className="w-full" 
                             entering={FadeInDown.delay(400).duration(1000).springify()}>

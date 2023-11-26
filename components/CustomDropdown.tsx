@@ -8,20 +8,30 @@ interface CustomDropdownProps {
     setSelectItem: (i: DropdownItem | null) => void;
     selectItem: DropdownItem | null;
     placeholder: string;
+    disable?: boolean
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
     data,
     setSelectItem,
     selectItem,
-    placeholder
+    placeholder,
+    disable
 }) => {
     const [value, setValue] = useState<string | null>(selectItem ? selectItem.value : null);
     const [isFocus, setIsFocus] = useState<boolean>(false);
 
     return (
         <Dropdown
-            style={[styles.dropdown, isFocus && { borderColor: 'rgb(14 165 233)', borderWidth: 2 }]}
+            style={[
+                styles.dropdown,
+                disable && {
+                    opacity: 0.4
+                },
+                isFocus && {
+                    borderColor: 'rgb(14 165 233)', borderWidth: 2
+                }
+            ]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
@@ -29,6 +39,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
             data={data}
             search
             maxHeight={300}
+            disable={disable ? disable : false}
             labelField="label"
             valueField="value"
             placeholder={!isFocus ? placeholder : 'Trống'}
@@ -45,7 +56,6 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
     )
 }
 
-
 const styles = StyleSheet.create({
     contentContainer: {
         paddingTop: Platform.OS === 'android' ? 10 : 50 
@@ -55,11 +65,10 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     dropdown: {
-        height: 50,
         borderColor: 'gray',
         borderWidth: 0.5,
         borderRadius: 16,
-        paddingHorizontal: 12,
+        paddingHorizontal: 16,
         paddingVertical: 12,
     },
     label: {
@@ -76,10 +85,6 @@ const styles = StyleSheet.create({
     },
     selectedTextStyle: {
         fontSize: 16,
-    },
-    iconStyle: {
-        width: 20,
-        height: 20,
     },
     inputSearchStyle: {
         height: 40,

@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { useRef, useState } from "react"
 import { AntDesign } from "@expo/vector-icons"
 import { Combobox } from "../components/Combobox"
+import { CustomDropdown } from "../components/CustomDropdown"
 
 const countries = [
   {label: 'Afghanistan', value: '93'},
@@ -144,30 +145,8 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
                     control={customerControl}
                 />
             </Animated.View>
-         {/* </KeyboardAwareScrollView> */}
 
-        {/* <Animated.View 
-            entering={FadeInDown.duration(1000).springify()} 
-            className="p-2 rounded-2xl w-full"
-        >
-            <Combobox
-                list={countries}
-                placeholder="Chọn tỉnh thành"
-            >
-            </Combobox>
-        </Animated.View> */}
-            
-            
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full"
-            >
-                <FormTextInput
-                    name='address'
-                    placeholder='Địa chỉ'
-                    control={customerControl}
-                />
-            </Animated.View>
+        
 
             <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
                 <TouchableOpacity
