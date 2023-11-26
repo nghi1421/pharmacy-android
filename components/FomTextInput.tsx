@@ -1,6 +1,5 @@
 import { Controller } from "react-hook-form"
 import { Text, TextInput, View } from "react-native"
-import Animated, { FadeInDown } from "react-native-reanimated"
 
 export interface FormInputTextProps {
     name: string
@@ -16,8 +15,7 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
     isPassword,
 }) => {
     return (
-        <Animated.View 
-            entering={FadeInDown.duration(1000).springify()} 
+        <View  
             className="w-full">
             <Controller
                 name={name}
@@ -42,6 +40,6 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
                     </View>
                 )}
             />
-        </Animated.View>
+        </View>
     )
 }

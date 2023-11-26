@@ -2,7 +2,6 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
-import SignUpScreen from './screens/SignUpScreen';
 import MainScreen from './screens/MainScreen';
 import { Alert, PermissionsAndroid } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
@@ -10,6 +9,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { setDeviceToken } from './utils/helper';
 import { Customer } from './types/User';
 import { DetailScreen } from './screens/DetailScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 const queryClient = new QueryClient()
 

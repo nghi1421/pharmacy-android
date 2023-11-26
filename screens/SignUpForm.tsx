@@ -1,11 +1,36 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { FormTextInput } from "../components/FomTextInput"
-import { Text, TouchableOpacity } from "react-native"
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import yup from "../utils/yup"
 import * as Yup from 'yup';
+import { useRef, useState } from "react"
+import { AntDesign } from "@expo/vector-icons"
+import { Combobox } from "../components/Combobox"
+
+const countries = [
+  {label: 'Afghanistan', value: '93'},
+  {label: 'Albania', value: '355'},
+  {label: 'Algeria', value: '213'},
+  {label: 'American Samoa', value: '1-684'},
+  {label: 'Andorra', value: '376'},
+  {label: 'Angola', value: '244'},
+  {label: 'Anguilla', value: '1-264'},
+  {label: 'Antarctica', value: '672'},
+  {label: 'Antigua and Barbuda', value: '1-268'},
+  {label: 'Argentina', value: '54'},
+  {label: 'Armenia', value: '374'},
+  {label: 'Aruba', value: '297'},
+  {label: 'Australia', value: '61'},
+  {label: 'Austria', value: '43'},
+  {label: 'Azerbaijan', value: '994'},
+  {label: 'Bahamas', value: '1-242'},
+  {label: 'Bahrain', value: '973'},
+  {label: 'Bangladesh', value: '880'},
+  {label: 'Barbados', value: '1-246'},
+];
 
 export interface CreateCustomerForm {
     username: string
@@ -71,22 +96,10 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
 
     const onSubmitCustomer = async (data: CreateCustomerForm) => { 
         console.log(data)
-        // if (isHaveInfor) {
-        //   logIn();
-        // }
-        // else {
-        //   setIsVeriry(true)
-        //   logIn();
-        //   console.log(isAuthenticated);
-        // }
     }
     
     return (
-        <KeyboardAwareScrollView
-            extraScrollHeight={50}
-            className='w-full flex'
-            enableOnAndroid
-        >
+        <>
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
                 className="p-2 rounded-2xl w-full">
@@ -131,7 +144,20 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
                     control={customerControl}
                 />
             </Animated.View>
-                
+         {/* </KeyboardAwareScrollView> */}
+
+        {/* <Animated.View 
+            entering={FadeInDown.duration(1000).springify()} 
+            className="p-2 rounded-2xl w-full"
+        >
+            <Combobox
+                list={countries}
+                placeholder="Chọn tỉnh thành"
+            >
+            </Combobox>
+        </Animated.View> */}
+            
+            
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
                 className="p-2 rounded-2xl w-full"
@@ -141,9 +167,9 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
                     placeholder='Địa chỉ'
                     control={customerControl}
                 />
-                </Animated.View>  
+            </Animated.View>
 
-                <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
+            <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
                 <TouchableOpacity
                     className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
                     onPress={handleSubmitCustomer(onSubmitCustomer)}
@@ -151,6 +177,6 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
                     <Text className="text-xl font-bold text-white text-center">Đăng ký</Text>
                 </TouchableOpacity>
             </Animated.View>
-        </KeyboardAwareScrollView>
+        </>
     )
 }
