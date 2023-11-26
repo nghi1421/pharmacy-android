@@ -10,6 +10,8 @@ import { setDeviceToken } from './utils/helper';
 import { Customer } from './types/User';
 import { DetailScreen } from './screens/DetailScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import { UpdateProfileScreen } from './screens/UpdateProfileScreen';
+import { ChangePasswordScreen } from './screens/ChangePasswordScreen';
 
 const queryClient = new QueryClient()
 
@@ -104,6 +106,8 @@ function App() {
               <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>
                       <Stack.Screen name="main" component={MainScreen} />
                       <Stack.Screen name="detail" component={DetailScreen} />
+                      <Stack.Screen name="change-password" component={ChangePasswordScreen} />
+                      <Stack.Screen name="update-profile" component={UpdateProfileScreen} />
               </Stack.Navigator>
             }
         </QueryClientProvider>

@@ -5,10 +5,11 @@ import { DropdownItem } from "../types/DropdownItem";
 
 interface CustomDropdownProps {
     data: DropdownItem[];
-    setSelectItem: (i: DropdownItem | null) => void;
+    setSelectItem: (i: any) => void;
     selectItem: DropdownItem | null;
     placeholder: string;
     disable?: boolean
+    searchable?: boolean
 }
 
 export const CustomDropdown: React.FC<CustomDropdownProps> = ({
@@ -16,7 +17,8 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
     setSelectItem,
     selectItem,
     placeholder,
-    disable
+    disable,
+    searchable
 }) => {
     const [value, setValue] = useState<string | null>(selectItem ? selectItem.value : null);
     const [isFocus, setIsFocus] = useState<boolean>(false);
@@ -37,7 +39,7 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
             inputSearchStyle={styles.inputSearchStyle}
             activeColor='rgb(241 245 249)'
             data={data}
-            search
+            search={searchable ?? true}
             maxHeight={300}
             disable={disable ? disable : false}
             labelField="label"

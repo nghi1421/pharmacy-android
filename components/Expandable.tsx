@@ -3,14 +3,15 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { HistoryExpandable } from "../types/History";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 interface ExpandableProps {
     data: HistoryExpandable,
     onClick: () => void
 }
 export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
-    const navigation = useNavigation()
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const [layoutHeight, setLayoutHeight] = useState<number|null>(0)
     const rotate = useSharedValue(180);
 

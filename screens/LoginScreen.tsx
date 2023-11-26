@@ -1,7 +1,7 @@
 import { View, Text, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { FormTextInput } from '../components/FomTextInput';
 import { useForm } from 'react-hook-form';
@@ -10,10 +10,7 @@ import yup from '../utils/yup';
 import * as Yup from 'yup';
 import { useLogin } from '../hooks/authenticationHook';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Dropdown } from 'react-native-element-dropdown';
-import { DropdownItem } from '../types/DropdownItem';
-import { CustomDropdown } from '../components/CustomDropdown';
-import { Address } from '../components/Address';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export interface LoginForm {
     username: string
@@ -24,17 +21,6 @@ const defaultValues = {
     username: "",
     password: "",
 };
-
-  const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-  ];
 
 const loginFormValidate: Yup.ObjectSchema<LoginForm> = yup.object({
     username: yup
@@ -49,7 +35,7 @@ const loginFormValidate: Yup.ObjectSchema<LoginForm> = yup.object({
 
 export default function LoginScreen() {
     const login = useLogin();
-    const navigation = useNavigation();
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const {
         control,
         handleSubmit,
@@ -57,11 +43,7 @@ export default function LoginScreen() {
         defaultValues: defaultValues,
         resolver: yupResolver(loginFormValidate)
     })
-    const [address, setAddress] = useState<string>('')
 
-    useEffect(() => {
-        console.log(address);
-    })
     const onSubmit = (data: LoginForm) => {
         login.mutate(data)
     }
@@ -110,13 +92,6 @@ export default function LoginScreen() {
                                 isPassword={ true }
                                 placeholder='Mật khẩu'
                             />
-                        </Animated.View>
-                        
-                        <Animated.View 
-                            entering={FadeInDown.duration(1000).springify()} 
-                            className="p-2 rounded-2xl w-full">
-                            <Address setAddress={setAddress} />  
-
                         </Animated.View>
                                 
                         <Animated.View 

@@ -6,10 +6,13 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import yup from "../utils/yup"
 import * as Yup from 'yup';
-import { useRef, useState } from "react"
-import { AntDesign } from "@expo/vector-icons"
-import { Combobox } from "../components/Combobox"
+import { useState } from "react"
 import { CustomDropdown } from "../components/CustomDropdown"
+import { Address } from "../components/Address"
+import { getDeviceToken } from "../utils/helper"
+import { useSignUp } from "../hooks/authenticationHook"
+import { genders } from "../utils/constants"
+import { DropdownItem } from "../types/DropdownItem"
 
 const countries = [
   {label: 'Afghanistan', value: '93'},
@@ -61,42 +64,69 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
         .string()
         .required('Họ và tên bắt buộc.')
         .max(255),
-    phoneNumber: yup
-        .string()
-        .required('Số điện thoại bắt buộc.')
-        //@ts-ignore
-        .phoneNumber('Số điện thoại không hợp lệ.'),
     username: yup
         .string()
         .required('Tên đăng nhập bắt buộc.')
+        .min(6)
         .max(255),
     password: yup
         .string()
         .required('Mật khẩu bắt buộc.')
+        .min(6)
         .max(255),
     confirmationPassword: yup
         .string()
         .required('Xác nhận mật khẩu bắt buộc.')
         .oneOf([Yup.ref('password'), ''], 'Xác nhận mật khẩu không khớp.')
+        .min(6)
         .max(255),
 })
 
 interface SignUpProps {
-    phoneNumher: string;
+    phoneNumber: string;
 }
 
-export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
+export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
+    const signup = useSignUp()
     const {
         control: customerControl,
-        handleSubmit: handleSubmitCustomer,
+        handleSubmit,
         setError
     } = useForm<CreateCustomerForm>({
-        defaultValues: defaultValues,
+        defaultValues: {...defaultValues},
         resolver: yupResolver(customerFormValidate)
     })
+    const [address, setAddress] = useState<string>('')
+    const [gender, setGender] = useState<DropdownItem>({ label: 'Nữ', value: '0' })
+    const [addressError, setAddressError] = useState<string>('')
 
-    const onSubmitCustomer = async (data: CreateCustomerForm) => { 
-        console.log(data)
+    const onSubmit = (data: CreateCustomerForm) => { 
+        getDeviceToken().then(deviceToken => {
+            if (address.length > 0) {
+                if (deviceToken) {
+                    console.log({
+                        ...data,
+                        address: address,
+                        deviceToken,
+                        phoneNumber: phoneNumber,
+                        gender: gender.value
+                    })
+
+                    signup.mutate({
+                        ...data,
+                        address: address,
+                        deviceToken,
+                        phoneNumber: phoneNumber,
+                        gender: gender.value
+                    });
+                }
+                console.log('1')
+                setAddressError('')
+            }
+            else {
+                setAddressError('Vui lòng nhập địa chỉ.')
+            }
+        })
     }
     
     return (
@@ -146,12 +176,30 @@ export const SignUpForm: React.FC<SignUpProps> = ({phoneNumber}) => {
                 />
             </Animated.View>
 
-        
+            <Animated.View 
+                entering={FadeInDown.duration(1000).springify()} 
+                className="p-2 rounded-2xl w-full">
+                <Address setAddress={setAddress} />  
+                { addressError ?? <Text className='mt-2 text-red-600 font-semibold'>{ addressError }</Text>}
+            </Animated.View>
 
+            <Animated.View 
+                entering={FadeInDown.duration(1000).springify()} 
+                className="p-2 rounded-2xl w-full">
+                <CustomDropdown
+                    data={genders}
+                    setSelectItem={setGender}
+                    selectItem={gender}
+                    placeholder="Giới tính"
+                    searchable={false}
+                >
+
+                </CustomDropdown>
+            </Animated.View>
             <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
                 <TouchableOpacity
                     className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
-                    onPress={handleSubmitCustomer(onSubmitCustomer)}
+                    onPress={handleSubmit(onSubmit)}
                 >
                     <Text className="text-xl font-bold text-white text-center">Đăng ký</Text>
                 </TouchableOpacity>

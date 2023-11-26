@@ -1,7 +1,7 @@
-import { ActivityIndicator, LayoutAnimation, Platform, ScrollView, Text, UIManager, View } from "react-native";
+import { ActivityIndicator, Image, LayoutAnimation, Platform, ScrollView, Text, UIManager, View } from "react-native";
 import { Expandable } from "../components/Expandable";
 import { useEffect, useState } from "react";
-import { HistoryExpandable, HistoryItem } from "../types/History";
+import { HistoryExpandable } from "../types/History";
 import { useGetHistory } from "../hooks/historyHook";
 
 export function HistoryScreen() {
@@ -32,16 +32,23 @@ export function HistoryScreen() {
                 ?
                     <ActivityIndicator size="large" />
                 :
-                historiesExpand.map((historyExpand, index) => (
-                    <Expandable 
-                        onClick={
-                            () => {
-                                updateLayout(index)
-                            }
-                        }
-                        data={ historyExpand }
-                    />
-                ))
+                    historiesExpand.length > 0 
+                        ?
+                            historiesExpand.map((historyExpand, index) => (
+                                <Expandable 
+                                    onClick={
+                                        () => {
+                                            updateLayout(index)
+                                        }
+                                    }
+                                    data={ historyExpand }
+                                />
+                            ))
+                        :
+                        <View>
+                            <Image className='w-96 h-96 m-auto' source={require('../assets/images/empty-data.png')} />
+                            <Text className='text-2xl text-slate-600 mx-auto -mt-10'>Không có dữ liệu</Text>
+                        </View>
             }
         </ScrollView>
     )

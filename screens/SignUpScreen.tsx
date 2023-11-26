@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { ParamListBase, useNavigation } from '@react-navigation/native'
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 import { useForm } from 'react-hook-form';
 import { useVerifyPhoneNumber } from '../hooks/authenticationHook';
@@ -24,6 +24,7 @@ import { SignUpForm } from './SignUpForm';
 import { PreventKeyboard } from '../components/PreventKeyBoard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 // import { StatusBar } as ExpoStatusBar from 'expo-status-bar';
 
 export interface VerifyPhoneNumberForm {
@@ -44,7 +45,7 @@ const phoneNumberValidate: Yup.ObjectSchema<VerifyPhoneNumberForm> = yup.object(
 })
 
 export default function SignUpScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const { customer } = useContext(AuthContext);
   const {
     control: phoneNumberControl,
@@ -134,9 +135,9 @@ export default function SignUpScreen() {
                         ?
                           customer
                             ?
-                              <SignUpFormExistsData phoneNumher={watch('phoneNumber')} />
+                              <SignUpFormExistsData phoneNumber={watch('phoneNumber')} />
                             :
-                              <SignUpForm phoneNumher={watch('phoneNumber')}/>
+                              <SignUpForm phoneNumber={watch('phoneNumber')}/>
                         :
                         <>
                           <Animated.View 
@@ -198,7 +199,7 @@ export default function SignUpScreen() {
                   }
                     <Animated.View 
                       entering={FadeInDown.delay(600).duration(1000).springify()} 
-                      className="flex-row justify-center"
+                      className="flex-row justify-center mb-20"
                   >
                         <Text>Bạn đã có tài khoản? </Text>
                         <TouchableOpacity onPress={()=> navigation.push('login')}>
@@ -208,6 +209,9 @@ export default function SignUpScreen() {
                 </View>
               </View>
             </View>
+              {/* <View className='w-full h-80'>
+
+            </View> */}
             </ScrollView>
         </KeyboardAvoidingView>
     </SafeAreaView>

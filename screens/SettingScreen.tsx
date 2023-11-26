@@ -2,8 +2,11 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../App";
+import { ParamListBase, useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export function SettingScreen() {
+    const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const { customer, setCustomer, logOut } = useContext(AuthContext)
     return (
         <View className='flex-col h-full w-full bg-slate-200'>
@@ -21,7 +24,9 @@ export function SettingScreen() {
                 </View>
             </View>
             <TouchableOpacity
-                className='bg-slate-200'>
+                className='bg-slate-200'
+                onPress={() => navigation.navigate('update-profile')}
+            >
                 <View className='flex-row rounded-xl mx-6 p-4 mt-4 bg-white'>
                     <View className='my-auto mr-2'>
                         <MaterialCommunityIcons name="account-settings" size={24} color="rgb(14 165 233)" />
@@ -31,7 +36,10 @@ export function SettingScreen() {
             </TouchableOpacity>
 
             <TouchableOpacity
-                className='bg-slate-200'>
+                className='bg-slate-200'
+                onPress={() => navigation.navigate('change-password')}
+            >
+                    
                 <View className='flex-row rounded-xl mx-6 p-4 mt-1 bg-white'>
                     <View className='my-auto mr-2'>
                         <MaterialCommunityIcons name="key-change" size={24} color="rgb(14 165 233)" />

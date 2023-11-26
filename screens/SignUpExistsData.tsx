@@ -38,10 +38,10 @@ const customerFormValidate: Yup.ObjectSchema<SignUpExistDataForm> = yup.object({
 })
 
 interface SignUpProps {
-    phoneNumher: string;
+    phoneNumber: string;
 }
 
-export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumher }) => {
+export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumber }) => {
     const signup = useSignUp()
     const {
         control: customerControl,
@@ -53,10 +53,9 @@ export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumher }) => 
     })
 
     const onSubmit = (data: SignUpExistDataForm) => { 
-        console.log(data)
         getDeviceToken().then(deviceToken => {
             if (deviceToken) {
-                signup.mutate({...data, name: '', address: '', gender: '1', phoneNumber: phoneNumher, deviceToken})
+                signup.mutate({...data, name: '', address: '', gender: '1', phoneNumber: phoneNumber, deviceToken})
             }
         })
     }

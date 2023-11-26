@@ -113,7 +113,7 @@ export const Address: React.FC<AddressProp> = ({ initAddress, setAddress}) => {
         <>
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full"
+                className="py-2 rounded-2xl w-full"
             >
                 <CustomDropdown
                     data={provinces}
@@ -125,7 +125,7 @@ export const Address: React.FC<AddressProp> = ({ initAddress, setAddress}) => {
 
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full"
+                className="py-2 rounded-2xl w-full"
             >
                 <CustomDropdown
                     data={districts}
@@ -137,7 +137,7 @@ export const Address: React.FC<AddressProp> = ({ initAddress, setAddress}) => {
                 </Animated.View>
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full"
+                className="py-2 rounded-2xl w-full"
             >
                 <CustomDropdown
                     data={wards}
@@ -150,7 +150,7 @@ export const Address: React.FC<AddressProp> = ({ initAddress, setAddress}) => {
                 
             <Animated.View 
                 entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full"
+                className="py-2 rounded-2xl w-full"
             >
                 <TextInput
                     className='bg-black/5 p-5 rounded-2xl'
