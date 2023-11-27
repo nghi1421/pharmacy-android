@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Platform, StyleSheet } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import { DropdownItem } from "../types/DropdownItem";
@@ -23,6 +23,11 @@ export const CustomDropdown: React.FC<CustomDropdownProps> = ({
     const [value, setValue] = useState<string | null>(selectItem ? selectItem.value : null);
     const [isFocus, setIsFocus] = useState<boolean>(false);
 
+    useEffect(() => {
+        if (selectItem && selectItem.value !== value) {
+            setValue(selectItem ? selectItem.value : null)
+        }
+    }, [selectItem])
     return (
         <Dropdown
             style={[

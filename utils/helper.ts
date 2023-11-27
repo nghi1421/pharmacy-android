@@ -1,3 +1,4 @@
+import { ToastAndroid } from "react-native";
 import { Customer } from "../types/User";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -48,6 +49,14 @@ const getDeviceToken = async () => {
     return deviceToken;
 }
 
+const shortToast = (message: string) => {
+    ToastAndroid.showWithGravity(
+      message,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
+}
+
 export {
     setCustomer,
     getCustomer,
@@ -55,5 +64,6 @@ export {
     getOtp,
     removeCustomer,
     setDeviceToken,
-    getDeviceToken
+    getDeviceToken,
+    shortToast
 }

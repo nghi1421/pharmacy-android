@@ -4,4 +4,5 @@ export interface Customer {
     phoneNumber: string
     name: string
     address: string
+    gender: string
 }

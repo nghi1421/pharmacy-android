@@ -26,7 +26,7 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
                 }) => (
                     <View>
                         <TextInput
-                            className='bg-black/5 p-5 rounded-2xl'
+                            className='bg-black/5 p-5 rounded-2xl text-lg'
                             placeholder={placeholder}
                             placeholderTextColor={'gray'}
                             secureTextEntry={isPassword ? isPassword : false}
