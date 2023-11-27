@@ -1,7 +1,7 @@
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import Animated, { FadeInDown } from "react-native-reanimated"
 import { FormTextInput } from "../components/FomTextInput"
-import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Text, TouchableOpacity, View } from "react-native"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import yup from "../utils/yup"
@@ -13,28 +13,6 @@ import { getDeviceToken } from "../utils/helper"
 import { useSignUp } from "../hooks/authenticationHook"
 import { genders } from "../utils/constants"
 import { DropdownItem } from "../types/DropdownItem"
-
-const countries = [
-  {label: 'Afghanistan', value: '93'},
-  {label: 'Albania', value: '355'},
-  {label: 'Algeria', value: '213'},
-  {label: 'American Samoa', value: '1-684'},
-  {label: 'Andorra', value: '376'},
-  {label: 'Angola', value: '244'},
-  {label: 'Anguilla', value: '1-264'},
-  {label: 'Antarctica', value: '672'},
-  {label: 'Antigua and Barbuda', value: '1-268'},
-  {label: 'Argentina', value: '54'},
-  {label: 'Armenia', value: '374'},
-  {label: 'Aruba', value: '297'},
-  {label: 'Australia', value: '61'},
-  {label: 'Austria', value: '43'},
-  {label: 'Azerbaijan', value: '994'},
-  {label: 'Bahamas', value: '1-242'},
-  {label: 'Bahrain', value: '973'},
-  {label: 'Bangladesh', value: '880'},
-  {label: 'Barbados', value: '1-246'},
-];
 
 export interface CreateCustomerForm {
     username: string
