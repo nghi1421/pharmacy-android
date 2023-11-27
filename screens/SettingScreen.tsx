@@ -4,6 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { AuthContext } from "../App";
 import { ParamListBase, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { createConfirmation } from "../utils/confirmation";
 
 export function SettingScreen() {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -51,8 +52,7 @@ export function SettingScreen() {
             <TouchableOpacity
                 className='bg-slate-200'
                 onPress={() => {
-                    logOut()
-                    setCustomer(null)
+                    createConfirmation('Xác nhận', 'Bạn có muốn đăng xuất không?', logOut)
                 }}
             >
                 <View className='flex-row rounded-xl mx-6 p-4 mt-1 bg-white'>

@@ -1,6 +1,8 @@
 import { ToastAndroid } from "react-native";
 import { Customer } from "../types/User";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CustomValidate } from "../types/CustomValidate";
+import { UseFormSetError } from "react-hook-form";
 
 const setCustomer = async (customer: Customer) => {
     try {
@@ -57,6 +59,12 @@ const shortToast = (message: string) => {
     );
 }
 
+const handleValidate = (validateErrors: CustomValidate[], setError: UseFormSetError<any>) => {
+    validateErrors.forEach((validate: any) => {
+        setError(validate.key, { type: 'custom', message: validate.value[0]})
+    })
+}
+
 export {
     setCustomer,
     getCustomer,
@@ -65,5 +73,6 @@ export {
     removeCustomer,
     setDeviceToken,
     getDeviceToken,
-    shortToast
+    shortToast,
+    handleValidate
 }

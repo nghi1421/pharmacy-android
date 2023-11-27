@@ -209,9 +209,6 @@ export default function SignUpScreen() {
                 </View>
               </View>
             </View>
-              {/* <View className='w-full h-80'>
-
-            </View> */}
             </ScrollView>
         </KeyboardAvoidingView>
     </SafeAreaView>

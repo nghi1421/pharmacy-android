@@ -38,7 +38,10 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
   const [customer, setCustomer] = React.useState<Customer|null>(null);
   const logIn = () => setIsAuthenticated(true);
-  const logOut = () => setIsAuthenticated(false);
+  const logOut = () => {
+    setIsAuthenticated(false)
+    setCustomer(null)
+  };
 
   const requestUserPermission = async () => {
     const authStatus = await messaging().requestPermission();
