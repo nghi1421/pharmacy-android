@@ -88,6 +88,7 @@ export const ChangePasswordScreen = () => {
                 >
                     <FormTextInput
                         name='oldPassword'
+                        isPassword={true}
                         placeholder='Mật khẩu cũ'
                         control={control}
                     />
@@ -99,6 +100,7 @@ export const ChangePasswordScreen = () => {
                 >
                     <FormTextInput
                         name='newPassword'
+                        isPassword={true}
                         placeholder='Mật khẩu mới'
                         control={control}
                     />
@@ -110,6 +112,7 @@ export const ChangePasswordScreen = () => {
                 >
                     <FormTextInput
                         name='confirmationPassword'
+                        isPassword={true}
                         placeholder='Xác nhận mật khẩu'
                         control={control}
                     />

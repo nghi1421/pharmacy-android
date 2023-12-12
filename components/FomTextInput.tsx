@@ -1,6 +1,8 @@
 import { ReactElement } from "react"
 import { Controller } from "react-hook-form"
-import { Text, TextInput, View } from "react-native"
+import { Pressable, Text, TextInput, View } from "react-native"
+import { useTogglePasswordVisibility } from "../hooks/togglePasswordVisibility"
+import { MaterialCommunityIcons } from "@expo/vector-icons"
 
 export interface FormInputTextProps {
     name: string
@@ -17,7 +19,9 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
     isPassword,
     renderIcon
 }) => {
-
+    const { passwordVisibility, rightIcon, handlePasswordVisibility } =
+        useTogglePasswordVisibility();
+    
     const icon = renderIcon && renderIcon()
     return (
         <View  
@@ -30,21 +34,42 @@ export const FormTextInput: React.FC<FormInputTextProps> = ({
                     fieldState: { error },
                 }) => (
                     <View >
-                        { icon }
-                         
-                        <TextInput
-                            className='bg-black/5 p-5 rounded-2xl text-lg'
-                            placeholder={placeholder}
-                            placeholderTextColor={'gray'}
-                            secureTextEntry={isPassword ? isPassword : false}
-                            value={value}
-                            onChangeText={onChange}
-                        />
+                        {icon}
+                        
+                        {
+                            isPassword
+                                ?
+                                <View className='flex-row align-items-center'>
+                                    <TextInput
+                                        secureTextEntry={passwordVisibility}
+                                        className='bg-black/5 p-5 rounded-2xl text-lg flex-1'
+                                        placeholder={placeholder}
+                                        placeholderTextColor={'gray'}
+                                        value={value}
+                                        onChangeText={onChange}
+                                    />
+                                    <Pressable onPress={handlePasswordVisibility} className='my-auto absolute right-4 top-6'>
+                                        <MaterialCommunityIcons name={rightIcon} size={22} color="#232323" />
+                                    </Pressable>
+                                </View>
+                                :
+                                <View className='flex-row align-items-center'>
+                                    <TextInput
+                                        className='bg-black/5 p-5 rounded-2xl text-lg flex-1'
+                                        placeholder={placeholder}
+                                        placeholderTextColor={'gray'}
+                                        value={value}
+                                        onChangeText={onChange}
+                                    />
+                                </View>
+                        }
+
                         {
                             error &&
                             <Text className='mt-2 text-red-600 font-semibold'>{ error.message }</Text>
                         }
                     </View>
+
                 )}
             />
         </View>

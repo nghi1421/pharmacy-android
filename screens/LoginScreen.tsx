@@ -34,16 +34,16 @@ const loginFormValidate: Yup.ObjectSchema<LoginForm> = yup.object({
 })
 
 export default function LoginScreen() {
-    const login = useLogin();
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
     const {
         control,
         handleSubmit,
+        setError,
     } = useForm<LoginForm>({
         defaultValues: defaultValues,
         resolver: yupResolver(loginFormValidate)
     })
-
+    const login = useLogin(setError);
     const onSubmit = (data: LoginForm) => {
         login.mutate(data)
     }

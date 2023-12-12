@@ -13,6 +13,7 @@ import { getDeviceToken } from "../utils/helper"
 import { useSignUp } from "../hooks/authenticationHook"
 import { genders } from "../utils/constants"
 import { DropdownItem } from "../types/DropdownItem"
+import { FormPhoneNumber } from "../components/FormPhoneNumber"
 
 export interface CreateCustomerForm {
     username: string
@@ -20,6 +21,7 @@ export interface CreateCustomerForm {
     confirmationPassword: string
     name: string;
     phoneNumber: string;
+    email: string;
     address: string;
     gender: string;
     deviceToken: string
@@ -30,6 +32,7 @@ const defaultValues = {
     password: "",
     confirmationPassword: "",
     name: "",
+    email: '',
     phoneNumber: "",
     gender: '1',
     address: '',
@@ -41,7 +44,13 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
     name: yup
         .string()
         .required('Họ và tên bắt buộc.')
-        .max(255),
+        .max(255, 'Họ và tên không quá 255 kí tự'),
+    phoneNumber: yup
+        .string()
+        .required('Số điện thoại bắt buộc.')
+        //@ts-ignore
+        .phoneNumber('Số điện thoại không hợp lệ.')
+        .max(15, 'Số điện thoại không quá 15 kí tự'),
     username: yup
         .string()
         .required('Tên đăng nhập bắt buộc.')
@@ -61,24 +70,24 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
 })
 
 interface SignUpProps {
-    phoneNumber: string;
+    email: string;
 }
 
-export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
+export const SignUpForm: React.FC<SignUpProps> = ({ email }) => {
     const signup = useSignUp()
     const {
         control: customerControl,
         handleSubmit,
         setError
     } = useForm<CreateCustomerForm>({
-        defaultValues: {...defaultValues},
+        defaultValues: { ...defaultValues },
         resolver: yupResolver(customerFormValidate)
     })
     const [address, setAddress] = useState<string>('')
     const [gender, setGender] = useState<DropdownItem>({ label: 'Nữ', value: '0' })
     const [addressError, setAddressError] = useState<string>('')
 
-    const onSubmit = (data: CreateCustomerForm) => { 
+    const onSubmit = (data: CreateCustomerForm) => {
         getDeviceToken().then(deviceToken => {
             if (address.length > 0) {
                 if (deviceToken) {
@@ -86,7 +95,8 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                         ...data,
                         address: address,
                         deviceToken,
-                        phoneNumber: phoneNumber,
+                        phoneNumber: data.phoneNumber,
+                        email: email,
                         gender: gender.value
                     })
 
@@ -94,11 +104,10 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                         ...data,
                         address: address,
                         deviceToken,
-                        phoneNumber: phoneNumber,
+                        email: email,
                         gender: gender.value
                     });
                 }
-                console.log('1')
                 setAddressError('')
             }
             else {
@@ -106,11 +115,11 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
             }
         })
     }
-    
+
     return (
         <>
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full">
                 <FormTextInput
                     name='username'
@@ -118,9 +127,9 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                     control={customerControl}
                 />
             </Animated.View>
-            
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full"
             >
                 <FormTextInput
@@ -130,9 +139,9 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                     control={customerControl}
                 />
             </Animated.View>
-                
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full"
             >
                 <FormTextInput
@@ -142,9 +151,9 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                     control={customerControl}
                 />
             </Animated.View>
-                
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full"
             >
                 <FormTextInput
@@ -154,15 +163,26 @@ export const SignUpForm: React.FC<SignUpProps> = ({ phoneNumber }) => {
                 />
             </Animated.View>
 
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
-                className="p-2 rounded-2xl w-full">
-                <Address setAddress={setAddress} />  
-                { addressError ?? <Text className='mt-2 text-red-600 font-semibold'>{ addressError }</Text>}
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
+                className="p-2 rounded-2xl w-full"
+            >
+                <FormPhoneNumber
+                    name='phoneNumber'
+                    placeholder='Số điện thoại'
+                    control={customerControl}
+                />
             </Animated.View>
 
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
+                className="p-2 rounded-2xl w-full">
+                <Address setAddress={setAddress} />
+                {addressError ?? <Text className='mt-2 text-red-600 font-semibold'>{addressError}</Text>}
+            </Animated.View>
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full">
                 <CustomDropdown
                     data={genders}

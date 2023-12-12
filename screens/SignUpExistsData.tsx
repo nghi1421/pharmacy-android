@@ -38,10 +38,10 @@ const customerFormValidate: Yup.ObjectSchema<SignUpExistDataForm> = yup.object({
 })
 
 interface SignUpProps {
-    phoneNumber: string;
+    email: string;
 }
 
-export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumber }) => {
+export const SignUpFormExistsData: React.FC<SignUpProps> = ({ email }) => {
     const signup = useSignUp()
     const {
         control: customerControl,
@@ -52,18 +52,27 @@ export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumber }) => 
         resolver: yupResolver(customerFormValidate)
     })
 
-    const onSubmit = (data: SignUpExistDataForm) => { 
+    const onSubmit = (data: SignUpExistDataForm) => {
         getDeviceToken().then(deviceToken => {
             if (deviceToken) {
-                signup.mutate({...data, name: '', address: '', gender: '1', phoneNumber: phoneNumber, deviceToken})
+                signup.mutate(
+                    {
+                        ...data,
+                        name: '',
+                        address: '',
+                        gender: '1',
+                        phoneNumber: '',
+                        email: email,
+                        deviceToken
+                    })
             }
         })
     }
-    
+
     return (
         <>
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full">
                 <FormTextInput
                     name='username'
@@ -71,35 +80,35 @@ export const SignUpFormExistsData: React.FC<SignUpProps> = ({ phoneNumber }) => 
                     control={customerControl}
                 />
             </Animated.View>
-            
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full"
             >
                 <FormTextInput
-                name='password'
-                placeholder='Mật khẩu'
-                isPassword={true}
-                control={customerControl}
+                    name='password'
+                    placeholder='Mật khẩu'
+                    isPassword={true}
+                    control={customerControl}
                 />
             </Animated.View>
-                
-            <Animated.View 
-                entering={FadeInDown.duration(1000).springify()} 
+
+            <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
                 className="p-2 rounded-2xl w-full"
             >
                 <FormTextInput
-                name='confirmationPassword'
-                isPassword={true}
-                placeholder='Xác nhận mật khẩu'
-                control={customerControl}
+                    name='confirmationPassword'
+                    isPassword={true}
+                    placeholder='Xác nhận mật khẩu'
+                    control={customerControl}
                 />
             </Animated.View>
 
             <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
                 <TouchableOpacity
                     className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
-                    onPress={ handleSubmit(onSubmit) }
+                    onPress={handleSubmit(onSubmit)}
                 >
                     <Text className="text-xl font-bold text-white text-center">Đăng ký</Text>
                 </TouchableOpacity>
