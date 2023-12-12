@@ -1,4 +1,4 @@
-import { AntDesign, MaterialIcons, Octicons} from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, Octicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
@@ -14,10 +14,12 @@ import { AuthContext } from "../App";
 import { genders } from "../utils/constants";
 import { useCheckAndSendOTPCode, useUpdateProfile } from "../hooks/updateProfileHook";
 import { OtpCode } from "../components/OtpCode";
+import { FormPhoneNumber } from "../components/FormPhoneNumber";
 
 export interface UpdateProfileForm {
     id: number
     name: string
+    email: string
     phoneNumber: string
     address: string
     gender: string
@@ -33,14 +35,21 @@ const profileValidate: Yup.ObjectSchema<UpdateProfileForm> = yup.object({
         .string()
         .required('Số điện thoại bắt buộc.')
         //@ts-ignore
-        .phoneNumber('Số điện thoại không hợp lệ.'),
+        .phoneNumber('Số điện thoại không hợp lệ.')
+        .max(15, 'Số điện thoại không quá 15 kí tự'),
+    email: yup
+        .string()
+        .required('Email bắt buộc.')
+        .max(255, 'Email không quá 255 kí tự')
+        //@ts-ignore
+        .email('Email không hợp lệ.'),
 })
 
 export const UpdateProfileScreen = () => {
     const navigation = useNavigation();
     const { customer } = useContext(AuthContext)
     const handleGoBack = () => {
-        navigation.goBack(); 
+        navigation.goBack();
     };
     const {
         control,
@@ -49,7 +58,7 @@ export const UpdateProfileScreen = () => {
         watch,
         setValue
     } = useForm<UpdateProfileForm>({
-        defaultValues: {...customer},
+        defaultValues: { ...customer },
         resolver: yupResolver(profileValidate)
     })
     const updateProfile = useUpdateProfile(setError);
@@ -58,13 +67,13 @@ export const UpdateProfileScreen = () => {
     const [addressError, setAddressError] = useState<string>('')
     const [optCode, setOtpCode] = useState<string>('')
     const [otpError, setOtpError] = useState<string>('')
-    const verifyPhoneNumber = useCheckAndSendOTPCode(setError)
+    const verifyEmail = useCheckAndSendOTPCode(setError)
     const [optFromServer, setOtpFromServer] = useState<string>('')
     const [verified, setVerified] = useState<boolean>(true)
 
     const onSubmit = (data: UpdateProfileForm) => {
         if (address.length > 0) {
-            if (watch('phoneNumber') === customer?.phoneNumber) {
+            if (watch('email') === customer?.email) {
                 updateProfile.mutate({
                     ...data,
                     address: address,
@@ -73,21 +82,21 @@ export const UpdateProfileScreen = () => {
                 })
             }
             else {
-                setVerified(false)
-                verifyPhoneNumber.mutate({phoneNumber: watch('phoneNumber')})
+                verifyEmail.mutate({ email: watch('email') })
             }
         }
         else {
             setAddressError('Địa chỉ bắt buộc.')
-        }   
+        }
     }
-    
+
     const checkVerify = () => {
         if (optCode === optFromServer) {
             updateProfile.mutate({
                 phoneNumber: watch('phoneNumber'),
                 name: watch('name'),
                 address: address,
+                email: watch('email'),
                 gender: gender.value,
                 id: customer?.id as number
             })
@@ -99,15 +108,16 @@ export const UpdateProfileScreen = () => {
     }
 
     const resendOtp = () => {
-        verifyPhoneNumber.mutate({phoneNumber: watch('phoneNumber')})
+        verifyEmail.mutate({ email: watch('email') })
     }
 
     useEffect(() => {
-        if (verifyPhoneNumber.data) {
+        if (verifyEmail.data) {
+            setVerified(false)
             setOtpError('')
-            setOtpFromServer(verifyPhoneNumber.data)
-        } 
-    }, [verifyPhoneNumber.data])
+            setOtpFromServer(verifyEmail.data)
+        }
+    }, [verifyEmail.data])
 
     return (
         <>
@@ -119,15 +129,15 @@ export const UpdateProfileScreen = () => {
                     Cập nhật thông tin
                 </Text>
             </View>
-            
+
             {
                 verified
                     ?
                     <View
                         className='p-2 mt-4'
                     >
-                        <Animated.View 
-                            entering={FadeInDown.duration(1000).springify()} 
+                        <Animated.View
+                            entering={FadeInDown.duration(1000).springify()}
                             className="p-2 rounded-2xl w-full"
                         >
                             <FormTextInput
@@ -138,36 +148,46 @@ export const UpdateProfileScreen = () => {
                         </Animated.View>
 
 
-                            <Animated.View 
-                            entering={FadeInDown.duration(1000).springify()} 
+                        <Animated.View
+                            entering={FadeInDown.duration(1000).springify()}
                             className="p-2 rounded-2xl w-full"
                         >
-                            
                             <FormTextInput
-                                name='phoneNumber'
-                                placeholder='Số điện thoại'
+                                name='email'
+                                placeholder='Nhập email'
                                 control={control}
-                                renderIcon={() => 
-                                    watch('phoneNumber') === customer?.phoneNumber
+                                renderIcon={() =>
+                                    watch('email') === customer?.email
                                         ? <View className='-mb-4'>
                                             <MaterialIcons name="verified" size={24} color="green" />
-                                         </View>
+                                        </View>
                                         : <View className='-mb-4'>
                                             <Octicons name="unverified" size={24} color="red" />
-                                    </View>
+                                        </View>
                                 }
                             />
                         </Animated.View>
-                                
-                        <Animated.View 
-                            entering={FadeInDown.duration(1000).springify()} 
-                            className="p-2 rounded-2xl w-full">
-                                <Address setAddress={setAddress} initAddress={customer ? customer.address : ''} />  
-                            { addressError ?? <Text className='mt-2 text-red-600 font-semibold'>{ addressError }</Text>}
+
+                        <Animated.View
+                            entering={FadeInDown.duration(1000).springify()}
+                            className="p-2 rounded-2xl w-full"
+                        >
+                            <FormPhoneNumber
+                                name='phoneNumber'
+                                placeholder='Số điện thoại'
+                                control={control}
+                            />
                         </Animated.View>
 
-                        <Animated.View 
-                            entering={FadeInDown.duration(1000).springify()} 
+                        <Animated.View
+                            entering={FadeInDown.duration(1000).springify()}
+                            className="p-2 rounded-2xl w-full">
+                            <Address setAddress={setAddress} initAddress={customer ? customer.address : ''} />
+                            {addressError ?? <Text className='mt-2 text-red-600 font-semibold'>{addressError}</Text>}
+                        </Animated.View>
+
+                        <Animated.View
+                            entering={FadeInDown.duration(1000).springify()}
                             className="p-2 rounded-2xl w-full">
                             <CustomDropdown
                                 data={genders}
@@ -193,10 +213,10 @@ export const UpdateProfileScreen = () => {
                         className='p-2 mt-4'
                     >
                         <View className="flex items-center">
-                            <Animated.Text 
-                                entering={FadeInUp.duration(1000).springify()} 
+                            <Animated.Text
+                                entering={FadeInUp.duration(1000).springify()}
                                 className="text-sky-400 font-bold tracking-wider text-5xl mb-10">
-                                    Xác thực 
+                                Xác thực
                             </Animated.Text>
                         </View>
                         <OtpCode
@@ -205,9 +225,9 @@ export const UpdateProfileScreen = () => {
                         />
                         <Animated.View className="w-full flex-row gap-3 mt-10" entering={FadeInDown.delay(600).duration(1000).springify()}>
                             <TouchableOpacity className="flex-1 mt-10 bg-sky-400 p-3 rounded-2xl mb-3"
-                              onPress={() => {
-                                checkVerify();
-                              }}
+                                onPress={() => {
+                                    checkVerify();
+                                }}
                             >
                                 <Text className="text-xl font-bold text-white text-center">Xác thực</Text>
                             </TouchableOpacity>

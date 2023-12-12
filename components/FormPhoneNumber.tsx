@@ -9,13 +9,13 @@ export interface FormInputTextProps {
 }
 
 export const FormPhoneNumber: React.FC<FormInputTextProps> = ({
-    control, 
+    control,
     name,
     placeholder,
 }) => {
     return (
-        <Animated.View 
-            entering={FadeInDown.duration(1000).springify()} 
+        <Animated.View
+            entering={FadeInDown.duration(1000).springify()}
             className="w-full">
             <Controller
                 name={name}
@@ -26,7 +26,7 @@ export const FormPhoneNumber: React.FC<FormInputTextProps> = ({
                 }) => (
                     <View>
                         <TextInput
-                            className='bg-black/5 p-5 rounded-2xl'
+                            className='bg-black/5 p-5 rounded-2xl text-lg'
                             placeholder={placeholder}
                             keyboardType="numeric"
                             placeholderTextColor={'gray'}
@@ -35,7 +35,7 @@ export const FormPhoneNumber: React.FC<FormInputTextProps> = ({
                         />
                         {
                             error &&
-                            <Text className='mt-2 text-red-600 font-semibold'>{ error.message }</Text>
+                            <Text className='mt-2 text-red-600 font-semibold'>{error.message}</Text>
                         }
                     </View>
                 )}
