@@ -1,5 +1,6 @@
 import { DropdownItem } from "../types/DropdownItem"
 
+export const SOCKET_URL = 'http://192.168.1.27:3000/'
 export const SIGN_IN_CUSTOMER_URL = 'sign-up'
 export const LOGIN_URL = 'login'
 export const VERIFY_EMAIL_URL = 'verify-email'

@@ -1,13 +1,13 @@
 import axios from "axios";
 
 let config = {
-    "Content-Type" : "application/json"
+    "Content-Type": "application/json"
 };
 
 const axiosClient = axios.create({
     withCredentials: true,
     baseURL: 'http://192.168.1.27:3000/api/mobile/',
-    headers : config
+    headers: config
 })
 
 export default axiosClient;

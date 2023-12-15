@@ -26,6 +26,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { FormTextInput } from '../components/FomTextInput';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { getTest } from '../utils/helper';
 // import { StatusBar } as ExpoStatusBar from 'expo-status-bar';
 
 export interface VerifyEmailForm {

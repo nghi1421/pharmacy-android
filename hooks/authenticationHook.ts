@@ -31,7 +31,7 @@ const useVerifyPhoneNumber = (setError: UseFormSetError<any>) => {
         mutationFn: async (data: VerifyEmailForm) => {
             return await axiosClient
                 .post(VERIFY_EMAIL_URL, data)
-                .then(async (response) => {
+                .then((response) => {
                     if (response.data.data) {
                         setCustomer(response.data.data)
                         return response.data.otpCode
@@ -50,14 +50,15 @@ const useVerifyPhoneNumber = (setError: UseFormSetError<any>) => {
 }
 
 const useLogin = (setError: UseFormSetError<any>) => {
-    const { logIn, setCustomer } = useContext(AuthContext)
+    const { logIn, setCustomer, setRoomId } = useContext(AuthContext)
     return useMutation({
         mutationFn: async (data: LoginForm) => {
             return await axiosClient
                 .post(LOGIN_URL, data)
-                .then(async (response) => {
+                .then((response) => {
                     if (response.data.message) {
                         setCustomer(response.data.data.customer)
+                        setRoomId(response.data.data.roomId)
                         logIn()
                         return;
                     }

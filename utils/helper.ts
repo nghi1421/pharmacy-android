@@ -12,9 +12,27 @@ const setCustomer = async (customer: Customer) => {
     }
 }
 
+const setTest = async () => {
+    try {
+        await AsyncStorage.setItem('test', JSON.stringify([1, 2, 3, 4, 5, 5]));
+    }
+    catch (error) {
+        console.log('error async storage', error)
+    }
+}
+const getTest = async () => {
+    try {
+        const jsonValue = await AsyncStorage.getItem('test');
+        console.log('Here is your value::::', jsonValue)
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+        console.log('error async storage', error)
+    }
+}
+
 const getCustomer = async () => {
     try {
-        const jsonValue  = await AsyncStorage.getItem('customer');
+        const jsonValue = await AsyncStorage.getItem('customer');
         return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
         console.log('error async storage', error)
@@ -35,7 +53,7 @@ const setOtp = async (otp: string) => {
 
 const getOtp = async () => {
     try {
-        const value  = await AsyncStorage.getItem('otp');
+        const value = await AsyncStorage.getItem('otp');
         return value != null ? value : null;
     } catch (error) {
         console.log('error async storage', error)
@@ -53,21 +71,23 @@ const getDeviceToken = async () => {
 
 const shortToast = (message: string) => {
     ToastAndroid.showWithGravity(
-      message,
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
     );
 }
 
 const handleValidate = (validateErrors: CustomValidate[], setError: UseFormSetError<any>) => {
     validateErrors.forEach((validate: any) => {
-        setError(validate.key, { type: 'custom', message: validate.value[0]})
+        setError(validate.key, { type: 'custom', message: validate.value[0] })
     })
 }
 
 export {
     setCustomer,
     getCustomer,
+    getTest,
+    setTest,
     setOtp,
     getOtp,
     removeCustomer,

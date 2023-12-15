@@ -23,24 +23,30 @@ export type AuthType = {
   logIn: () => void
   logOut: () => void
   customer: null | Customer
-  setCustomer: (c: Customer|null) => void
+  setCustomer: (c: Customer | null) => void
+  roomId: null | number
+  setRoomId: (c: number | null) => void
 }
 
 export const AuthContext = React.createContext<AuthType>({
   isAuthenticated: false,
   logIn: () => { },
   logOut: () => { },
+  roomId: null,
+  setRoomId: () => { },
   customer: null,
-  setCustomer: (c: Customer|null) => {}
+  setCustomer: (c: Customer | null) => { }
 });
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
-  const [customer, setCustomer] = React.useState<Customer|null>(null);
+  const [customer, setCustomer] = React.useState<Customer | null>(null);
+  const [roomId, setRoomId] = React.useState<number | null>(null);
   const logIn = () => setIsAuthenticated(true);
   const logOut = () => {
     setIsAuthenticated(false)
     setCustomer(null)
+    setRoomId(null)
   };
 
   const requestUserPermission = async () => {
@@ -57,7 +63,7 @@ function App() {
   const getToken = async () => {
     const token = await messaging().getToken();
     setDeviceToken(token);
-    console.log('My token:' , token);
+    console.log('My token:', token);
   }
 
   React.useEffect(() => {
@@ -74,7 +80,7 @@ function App() {
           );
         }
       });
-    
+
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log(
         'Notification caused app to open from background state:',
@@ -95,24 +101,24 @@ function App() {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logIn, logOut, customer, setCustomer }}>
+    <AuthContext.Provider value={{ isAuthenticated, logIn, logOut, customer, setCustomer, roomId, setRoomId }}>
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
           {
             !isAuthenticated
               ?
               <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
-                    <Stack.Screen name="login" component={LoginScreen} />
-                    <Stack.Screen name="signin" component={SignUpScreen} />
+                <Stack.Screen name="login" component={LoginScreen} />
+                <Stack.Screen name="signin" component={SignUpScreen} />
               </Stack.Navigator>
               :
               <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>
-                      <Stack.Screen name="main" component={MainScreen} />
-                      <Stack.Screen name="detail" component={DetailScreen} />
-                      <Stack.Screen name="change-password" component={ChangePasswordScreen} />
-                      <Stack.Screen name="update-profile" component={UpdateProfileScreen} />
+                <Stack.Screen name="main" component={MainScreen} />
+                <Stack.Screen name="detail" component={DetailScreen} />
+                <Stack.Screen name="change-password" component={ChangePasswordScreen} />
+                <Stack.Screen name="update-profile" component={UpdateProfileScreen} />
               </Stack.Navigator>
-            }
+          }
         </QueryClientProvider>
       </NavigationContainer>
     </AuthContext.Provider>

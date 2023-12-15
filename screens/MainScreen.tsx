@@ -3,7 +3,8 @@ import React from 'react';
 import { HistoryScreen } from './HistoryScreen';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SettingScreen } from './SettingScreen';
-  
+import { ChatScreen } from './ChatScreen';
+
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
@@ -12,7 +13,7 @@ export default function MainScreen() {
             <Tab.Screen
                 name="Lịch sử mua hàng"
                 component={HistoryScreen}
-                options={{ 
+                options={{
                     headerStyle: {
                         backgroundColor: 'rgb(14 165 233)',
                     },
@@ -20,21 +21,22 @@ export default function MainScreen() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                         justifyContent: 'center'
-                    }, 
+                    },
                     tabBarIcon: (tabInfo) => {
-                        return ( 
+                        return (
                             <MaterialCommunityIcons
                                 name="cart"
                                 size={24}
                                 color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"}
                             />
-                    );}
-                 }}
+                        );
+                    }
+                }}
             />
             <Tab.Screen
-                name="Thiết lập"
-                component={SettingScreen}
-                options={{ 
+                name="Chăm sóc khách hàng"
+                component={ChatScreen}
+                options={{
                     headerStyle: {
                         backgroundColor: 'rgb(14 165 233)',
                     },
@@ -42,16 +44,40 @@ export default function MainScreen() {
                     headerTitleStyle: {
                         fontWeight: 'bold',
                         justifyContent: 'center'
-                    }, 
+                    },
                     tabBarIcon: (tabInfo) => {
-                        return ( 
-                            <Ionicons 
+                        return (
+                            <MaterialCommunityIcons
+                                name="cart"
+                                size={24}
+                                color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"}
+                            />
+                        );
+                    }
+                }}
+            />
+            <Tab.Screen
+                name="Thiết lập"
+                component={SettingScreen}
+                options={{
+                    headerStyle: {
+                        backgroundColor: 'rgb(14 165 233)',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        justifyContent: 'center'
+                    },
+                    tabBarIcon: (tabInfo) => {
+                        return (
+                            <Ionicons
                                 name="md-person-circle-outline"
-                                size={24} 
-                                color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"} 
-                            /> 
-                    );}
-                 }}
+                                size={24}
+                                color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"}
+                            />
+                        );
+                    }
+                }}
             />
         </Tab.Navigator>
     )
