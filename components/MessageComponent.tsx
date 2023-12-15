@@ -1,6 +1,5 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Ionicons } from "@expo/vector-icons";
 import { styles } from "../assets/styles";
 
 export default function MessageComponent({ item, user }) {
@@ -16,16 +15,11 @@ export default function MessageComponent({ item, user }) {
                 }
             >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Ionicons
-                        name='person-circle-outline'
-                        size={30}
-                        color='black'
-                    />
                     <View
                         style={
                             status
                                 ? styles.mmessage
-                                : [styles.mmessage, { backgroundColor: "rgb(194, 243, 194)" }]
+                                : [styles.mmessage, { backgroundColor: "#bae6fd" }]
                         }
                     >
                         <Text>{item.text}</Text>

@@ -3,6 +3,8 @@ import { SOCKET_URL } from "../utils/constants";
 import { io } from "socket.io-client";
 import { Alert } from "react-native";
 import { AuthContext } from "../App";
+import dayjs from "dayjs";
+import { useGetMessageFromRoomId } from "./chatHook";
 
 export const useSocket = (phoneNumber: string | undefined) => {
     const { roomId } = useContext(AuthContext)
@@ -16,22 +18,21 @@ export const useSocket = (phoneNumber: string | undefined) => {
     const [message, setMessage] = useState('');
 
     const handleSendMessage = () => {
-        setMessage('');
-
-        socket.emit('chat message', roomId, message);
-
-
+        if (message && message.trim().length !== 0) {
+            setMessage('');
+            socket.emit('chat message', roomId, message, phoneNumber, '');
+        }
     }
 
     useEffect(() => {
         socket.emit('join-room', roomId);
 
-        socket.on('message', (msg) => {
+        socket.on('message', (msg, isFromCustomer, time, id) => {
             setChat((prevChat) => [...prevChat, {
-                time: '11:20:22',
-                id: prevChat.length + 1,
+                time: dayjs(time).format('HH:mm'),
+                id: id,
                 text: msg,
-                user: Math.random() > 0.5 ? 1 : 0
+                user: isFromCustomer ? 1 : 0
             }]);
         });
 
@@ -48,6 +49,7 @@ export const useSocket = (phoneNumber: string | undefined) => {
         socket,
         handleSendMessage,
         chat,
+        setChat,
         message,
         setMessage
     }
