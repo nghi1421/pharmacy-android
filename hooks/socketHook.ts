@@ -1,10 +1,10 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SOCKET_URL } from "../utils/constants";
 import { io } from "socket.io-client";
 import { Alert } from "react-native";
 import { AuthContext } from "../App";
 import dayjs from "dayjs";
-import { useGetMessageFromRoomId } from "./chatHook";
+import { Message } from "../types/Message";
 
 export const useSocket = (phoneNumber: string | undefined) => {
     const { roomId } = useContext(AuthContext)
@@ -14,34 +14,31 @@ export const useSocket = (phoneNumber: string | undefined) => {
         }
     }))
 
-    const [chat, setChat] = useState<any[]>([]);
+    const [chat, setChat] = useState<Message[]>([]);
     const [message, setMessage] = useState('');
 
     const handleSendMessage = () => {
         if (message && message.trim().length !== 0) {
-            setMessage('');
             socket.emit('chat message', roomId, message, phoneNumber, '');
+            setMessage('');
         }
     }
 
     useEffect(() => {
         socket.emit('join-room', roomId);
 
-        socket.on('message', (msg, isFromCustomer, time, id) => {
+        socket.on('message', (data: Message, fromCustomer: boolean) => {
             setChat((prevChat) => [...prevChat, {
-                time: dayjs(time).format('HH:mm'),
-                id: id,
-                text: msg,
-                user: isFromCustomer ? 1 : 0
+                content: data.content,
+                id: data.id,
+                fromCustomer: !fromCustomer,
+                time: dayjs(data.time).format('HH:mm'),
             }]);
         });
 
-        socket.on('connect_error', (data) => {
-            Alert.alert('A new FCM message arrived!', JSON.stringify(data));
-        })
-
         return () => {
-            socket.disconnect();
+            socket.off('message');
+            socket.off('join-room')
         }
     }, [])
 

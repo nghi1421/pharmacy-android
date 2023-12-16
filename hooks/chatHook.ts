@@ -6,12 +6,12 @@ import { GET_MESSAGES_FROM_ID_URL } from "../utils/constants"
 import dayjs from "dayjs"
 import { Message } from "../types/Message"
 
-export const createDataMessage = ({ id, time, content, fromCustomer }: Message) => {
+export const createDataMessage = ({ id, time, content, fromCustomer }: Message): Message => {
     return {
         time: dayjs(time).format('HH:mm'),
         id: id,
-        text: content,
-        user: fromCustomer ? 1 : 0
+        content: content,
+        fromCustomer: !fromCustomer
     }
 }
 
@@ -23,7 +23,7 @@ export const useGetMessageFromRoomId = () => {
             .get(`${GET_MESSAGES_FROM_ID_URL}${roomId}`)
             .then((response) => {
                 if (response.data.data) {
-                    const myData = response.data.data.messages.map((data: Message) => createData(data))
+                    const myData = response.data.data.messages.map((data: Message) => createDataMessage(data))
                     return myData
                 }
                 return response

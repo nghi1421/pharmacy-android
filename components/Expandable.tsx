@@ -12,7 +12,7 @@ interface ExpandableProps {
 }
 export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
     const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
-    const [layoutHeight, setLayoutHeight] = useState<number|null>(0)
+    const [layoutHeight, setLayoutHeight] = useState<number | null>(0)
     const rotate = useSharedValue(180);
 
     const animatedStyles = useAnimatedStyle(() => ({
@@ -37,7 +37,7 @@ export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
     }, [data.isExpanded])
 
     return (
-        <View>
+        <View className='mb-1'>
             <TouchableOpacity
                 className="flex-row bg-indigo-100 w-full h-16 p-4 justify-between align-center"
                 onPress={() => {
@@ -47,8 +47,8 @@ export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
             >
                 <Text
                     className="text-2xl font-bold"
-                >   
-                    { data.title }
+                >
+                    {data.title}
                 </Text>
                 <Animated.View
                     style={[animatedStyles]}
@@ -64,7 +64,7 @@ export const Expandable: React.FC<ExpandableProps> = ({ data, onClick }) => {
                         <TouchableOpacity
                             key={`${data.title}-history-${index}`}
                             className='px-3 py-2 flex-row bg-white'
-                            onPress={() => navigation.navigate('detail', {params: { history: history }})}
+                            onPress={() => navigation.navigate('detail', { params: { history: history } })}
                         >
                             <View className="text-center justify-center">
                                 <FontAwesome

@@ -1,15 +1,39 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { HistoryScreen } from './HistoryScreen';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { SettingScreen } from './SettingScreen';
 import { ChatScreen } from './ChatScreen';
+import { HomePage } from './HomePage';
 
 const Tab = createBottomTabNavigator();
 
 export default function MainScreen() {
     return (
-        <Tab.Navigator >
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+            <Tab.Screen
+                name="Trang chủ"
+                component={HomePage}
+                options={{
+                    headerStyle: {
+                        backgroundColor: 'rgb(14 165 233)',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: 'bold',
+                        justifyContent: 'center'
+                    },
+                    tabBarIcon: (tabInfo) => {
+                        return (
+                            <FontAwesome
+                                name="home"
+                                size={24}
+                                color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"}
+                            />
+                        );
+                    }
+                }}
+            />
             <Tab.Screen
                 name="Lịch sử mua hàng"
                 component={HistoryScreen}
@@ -34,7 +58,7 @@ export default function MainScreen() {
                 }}
             />
             <Tab.Screen
-                name="Chăm sóc khách hàng"
+                name="Tư vấn"
                 component={ChatScreen}
                 options={{
                     headerStyle: {
@@ -47,8 +71,8 @@ export default function MainScreen() {
                     },
                     tabBarIcon: (tabInfo) => {
                         return (
-                            <MaterialCommunityIcons
-                                name="cart"
+                            <AntDesign
+                                name="customerservice"
                                 size={24}
                                 color={tabInfo.focused ? "rgb(14 165 233)" : "#8e8e93"}
                             />
