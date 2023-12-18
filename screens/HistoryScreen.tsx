@@ -43,6 +43,7 @@ export function HistoryScreen() {
                                 ?
                                 historiesExpand.map((historyExpand, index) => (
                                     <Expandable
+                                        key={historyExpand.title}
                                         onClick={
                                             () => {
                                                 updateLayout(index)

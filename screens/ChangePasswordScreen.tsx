@@ -1,4 +1,4 @@
-import { AntDesign} from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Text, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
@@ -36,14 +36,18 @@ const changePasswordValidate: Yup.ObjectSchema<ChangePasswordForm> = yup.object(
     newPassword: yup
         .string()
         .required('Mật khẩu bắt buộc.')
-        .min(6)
-        .max(255),
+        .min(6, 'Mật khẩu tối thiểu 6 kí tự')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\`*])(?=.{6,})/,
+            "Mật khẩu phải bao gồm chữ số, chữ in hoa và ít nhất 1 kí tự đặc biệt."
+        )
+        .max(255, 'Mật khẩu tối đa 255 kí tự'),
     confirmationPassword: yup
         .string()
         .required('Xác nhận mật khẩu bắt buộc.')
+        .min(6, 'Mật khẩu tối thiểu 6 kí tự')
         .oneOf([Yup.ref('newPassword'), ''], 'Xác nhận mật khẩu không khớp.')
-        .min(6)
-        .max(255),
+        .max(255, 'Mật khẩu tối đa 255 kí tự'),
 })
 
 export const ChangePasswordScreen = () => {
@@ -53,16 +57,16 @@ export const ChangePasswordScreen = () => {
         control,
         handleSubmit,
     } = useForm<ChangePasswordForm>({
-        defaultValues: {...defaultValues, phoneNumber: customer ? customer.phoneNumber : ''},
+        defaultValues: { ...defaultValues, phoneNumber: customer ? customer.phoneNumber : '' },
         resolver: yupResolver(changePasswordValidate)
     })
     const changePassword = useChangePassword()
     const handleGoBack = () => {
-        navigation.goBack(); 
+        navigation.goBack();
     };
- 
+
     const onSubmit = (data: ChangePasswordForm) => {
-        
+
         const action = () => {
             changePassword.mutate(data);
         }
@@ -82,8 +86,8 @@ export const ChangePasswordScreen = () => {
             <View
                 className='p-2 mt-4'
             >
-                <Animated.View 
-                    entering={FadeInDown.duration(1000).springify()} 
+                <Animated.View
+                    entering={FadeInDown.duration(1000).springify()}
                     className="p-2 rounded-2xl w-full"
                 >
                     <FormTextInput
@@ -94,8 +98,8 @@ export const ChangePasswordScreen = () => {
                     />
                 </Animated.View>
 
-                <Animated.View 
-                    entering={FadeInDown.duration(1000).springify()} 
+                <Animated.View
+                    entering={FadeInDown.duration(1000).springify()}
                     className="p-2 rounded-2xl w-full"
                 >
                     <FormTextInput
@@ -106,8 +110,8 @@ export const ChangePasswordScreen = () => {
                     />
                 </Animated.View>
 
-                <Animated.View 
-                    entering={FadeInDown.duration(1000).springify()} 
+                <Animated.View
+                    entering={FadeInDown.duration(1000).springify()}
                     className="p-2 rounded-2xl w-full"
                 >
                     <FormTextInput
@@ -117,7 +121,7 @@ export const ChangePasswordScreen = () => {
                         control={control}
                     />
                 </Animated.View>
-     
+
                 <Animated.View className="w-full" entering={FadeInDown.delay(600).duration(1000).springify()}>
                     <TouchableOpacity
                         className="w-full mt-10 bg-sky-400 p-3 rounded-2xl mb-3"

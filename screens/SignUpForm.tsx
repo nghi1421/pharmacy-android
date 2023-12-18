@@ -53,20 +53,24 @@ const customerFormValidate: Yup.ObjectSchema<CreateCustomerForm> = yup.object({
         .max(15, 'Số điện thoại không quá 15 kí tự'),
     username: yup
         .string()
+        .min(6, 'Tên đăng nhập tối thiểu 6 kí tự')
         .required('Tên đăng nhập bắt buộc.')
-        .min(6)
-        .max(255),
+        .max(255, 'Tên đăng nhập tối đa 255 kí tự'),
     password: yup
         .string()
         .required('Mật khẩu bắt buộc.')
-        .min(6)
-        .max(255),
+        .min(6, 'Mật khẩu tối thiểu 6 kí tự')
+        .matches(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\`*])(?=.{6,})/,
+            "Mật khẩu phải bao gồm chữ số, chữ in hoa và ít nhất 1 kí tự đặc biệt."
+        )
+        .max(255, 'Mật khẩu tối đa 255 kí tự'),
     confirmationPassword: yup
         .string()
         .required('Xác nhận mật khẩu bắt buộc.')
+        .min(6, 'Mật khẩu tối thiểu 6 kí tự')
         .oneOf([Yup.ref('password'), ''], 'Xác nhận mật khẩu không khớp.')
-        .min(6)
-        .max(255),
+        .max(255, 'Mật khẩu tối đa 255 kí tự'),
 })
 
 interface SignUpProps {

@@ -82,8 +82,8 @@ export function DetailScreen() {
                                 <Text className='pb-2 px-1 flex-1 text-right text-slate-600 text-sm font-bold'>Đơn giá</Text>
                             </View>
                             {
-                                history.historyDetail.map((historyDetailData) => (
-                                    <View className='flex-row mx-1 align-items-end border-b border-slate-200'>
+                                history.historyDetail.map((historyDetailData, index) => (
+                                    <View key={historyDetailData.quantity + index} className='flex-row mx-1 align-items-end border-b border-slate-200'>
                                         <Text className='pb-2 px-1 flex-1 m-auto text-sm text-slate-500'>{historyDetailData.drugName}</Text>
                                         <Text className='pb-2 px-1 flex-1 m-auto text-sm text-center text-slate-500 font-bold'>{historyDetailData.quantity}</Text>
                                         <Text className='pb-2 px-1 flex-1 m-auto text-sm text-right text-slate-500 font-bold'>{historyDetailData.unitPrice}</Text>

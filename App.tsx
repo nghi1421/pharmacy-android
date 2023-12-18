@@ -12,6 +12,7 @@ import { DetailScreen } from './screens/DetailScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import { UpdateProfileScreen } from './screens/UpdateProfileScreen';
 import { ChangePasswordScreen } from './screens/ChangePasswordScreen';
+import ForgotPassworSreen from './screens/ForgotPasswordScreen';
 
 const queryClient = new QueryClient()
 
@@ -110,6 +111,7 @@ function App() {
               <Stack.Navigator initialRouteName='login' screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="login" component={LoginScreen} />
                 <Stack.Screen name="signin" component={SignUpScreen} />
+                <Stack.Screen name="forgot-password" component={ForgotPassworSreen} />
               </Stack.Navigator>
               :
               <Stack.Navigator initialRouteName='main' screenOptions={{ headerShown: false }}>

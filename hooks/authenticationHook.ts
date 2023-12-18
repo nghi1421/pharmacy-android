@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "react-query"
 import axiosClient from "../utils/axios"
-import { LOGIN_URL, SIGN_IN_CUSTOMER_URL, VERIFY_EMAIL_URL } from "../utils/constants"
+import { FORGOT_PASSWORD, LOGIN_URL, SIGN_IN_CUSTOMER_URL, VERIFY_EMAIL_URL } from "../utils/constants"
 import { VerifyEmailForm } from "../screens/SignUpScreen"
 import { CreateCustomerForm } from "../screens/SignUpForm"
 import { useContext } from "react"
@@ -49,6 +49,22 @@ const useVerifyPhoneNumber = (setError: UseFormSetError<any>) => {
     })
 }
 
+const useForgotPassword = () => {
+    return useMutation({
+        mutationFn: async (data: VerifyEmailForm) => {
+            return await axiosClient
+                .post(FORGOT_PASSWORD, data)
+                .then((response) => {
+                    if (response.data.data) {
+                        return response.data.otpCode
+                    }
+                    return response.data.otpCode
+
+                })
+        }
+    })
+}
+
 const useLogin = (setError: UseFormSetError<any>) => {
     const { logIn, setCustomer, setRoomId } = useContext(AuthContext)
     return useMutation({
@@ -77,5 +93,6 @@ const useLogin = (setError: UseFormSetError<any>) => {
 export {
     useSignUp,
     useVerifyPhoneNumber,
-    useLogin
+    useLogin,
+    useForgotPassword
 }
